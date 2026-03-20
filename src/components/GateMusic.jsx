@@ -20,17 +20,28 @@ function GateMusic({ src, autoplay = true, initialVolume = 0.2, onTrackChange })
     audio.volume = volume;
 
     if (autoplay) {
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => setIsPlaying(true))
-          .catch((error) => {
-            console.log('Autoplay prevented:', error);
-            setIsPlaying(false);
-          });
-      }
+      // Small delay to ensure audio context is ready
+      const timer = setTimeout(() => {
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => setIsPlaying(true))
+            .catch((error) => {
+              console.log('Autoplay prevented:', error);
+              setIsPlaying(false);
+              // Auto-retry once after a delay
+              setTimeout(() => {
+                audio.play()
+                  .then(() => setIsPlaying(true))
+                  .catch(() => setIsPlaying(false));
+              }, 1000);
+            });
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
     }
-  }, [src, autoplay]);
+  }, [src, autoplay, volume]);
 
   useEffect(() => {
     if (audioRef.current) {

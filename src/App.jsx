@@ -1,12 +1,29 @@
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import BeeHiveGate from './pages/BeeHiveGate';
 import LastHarvestPuzzle from './pages/LastHarvestPuzzle';
 import LibraryGate from './pages/LibraryGate';
 import EldenRingGate from './pages/EldenRingGate';
+import AudioEnabler from './components/AudioEnabler';
+import Preloader from './components/Preloader';
 import './App.css';
 
 function App() {
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
+
+  // Show AudioEnabler first
+  if (!audioEnabled) {
+    return <AudioEnabler onEnter={() => setAudioEnabled(true)} />;
+  }
+
+  // Then show Preloader
+  if (!assetsLoaded) {
+    return <Preloader onComplete={() => setAssetsLoaded(true)} />;
+  }
+
+  // Finally show the app
   return (
     <Router>
       <Routes>

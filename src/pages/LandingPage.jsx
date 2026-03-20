@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GateMusic from '../components/GateMusic';
 import './LandingPage.css';
 
@@ -9,18 +10,17 @@ import './LandingPage.css';
 function LandingPage() {
   const [showBookshelf, setShowBookshelf] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const navigate = useNavigate();
 
   const handleNowClick = (e) => {
     // Check if the text contains a zero (0) instead of letter O
     const currentText = e.target.innerText;
 
     if (currentText.includes('0')) {
-      // Contains a zero - show error message
-      setShowErrorMessage(true);
-      setTimeout(() => setShowErrorMessage(false), 3000);
-
-      // Hint in console
-      console.log("%cHmm... perhaps you should inspect this element more closely...", "color: #ff6600; font-size: 12px; font-style: italic;");
+      // N0W on the homepage should route straight to Gate 1.
+      setShowErrorMessage(false);
+      navigate('/gate-1-library');
+      return;
     } else {
       // They fixed it! Open bookshelf (case insensitive check for "now")
       const textLower = currentText.toLowerCase();

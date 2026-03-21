@@ -1,24 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import BeeHiveGate from './pages/BeeHiveGate';
 import LastHarvestPuzzle from './pages/LastHarvestPuzzle';
 import LibraryGate from './pages/LibraryGate';
 import EldenRingGate from './pages/EldenRingGate';
-import AudioEnabler from './components/AudioEnabler';
 import Preloader from './components/Preloader';
 import './App.css';
 
 function App() {
-  const [audioEnabled, setAudioEnabled] = useState(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
 
-  // Show AudioEnabler first
-  if (!audioEnabled) {
-    return <AudioEnabler onEnter={() => setAudioEnabled(true)} />;
-  }
+  // Enable audio autoplay on first load
+  useEffect(() => {
+    const enableAudio = async () => {
+      try {
+        const silentAudio = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4Qw');
+        await silentAudio.play().catch(() => {});
+      } catch (e) {
+        // Silent fail
+      }
+    };
+    enableAudio();
+  }, []);
 
-  // Then show Preloader
+  // Show Preloader to load assets
   if (!assetsLoaded) {
     return <Preloader onComplete={() => setAssetsLoaded(true)} />;
   }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import GateMusic from '../components/GateMusic';
 import './LibraryGate.css';
 
-const BOOK_ASSET_PATH = '/assets/magicbook/64x64/';
+const getBookImage = (filename) => new URL(`../assets/magicbook/64x64/${filename}`, import.meta.url).href;
 
 // UBIK cycling texts (20 texts that cycle)
 const UBIK_TEXTS = [
@@ -230,7 +230,7 @@ function LibraryGate() {
                 >
                   <div className="book-image-wrapper">
                     <img
-                      src={BOOK_ASSET_PATH + book.img}
+                      src={getBookImage(book.img)}
                       alt={book.title}
                       className="book-image"
                       draggable={false}
@@ -257,7 +257,7 @@ function LibraryGate() {
             <button className="book-close-btn" onClick={closeBook}>X</button>
             <div className="book-open-header">
               <img
-                src={BOOK_ASSET_PATH + openBook.img}
+                src={getBookImage(openBook.img)}
                 alt={openBook.title}
                 className="book-open-icon"
               />

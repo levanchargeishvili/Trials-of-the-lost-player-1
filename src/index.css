@@ -30,11 +30,11 @@
 
 /* Global custom cursor */
 *, *::before, *::after {
-  cursor: url('/pointer-cursor.png') 48 12, auto;
+  cursor: url('./assets/pointer-cursor.png') 48 12, auto;
 }
 
 button, a, input[type="range"], [role="button"], select, label[for], summary {
-  cursor: url('/pointer-cursor.png') 48 12, pointer;
+  cursor: url('./assets/pointer-cursor.png') 48 12, pointer;
 }
 
 a {

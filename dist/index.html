@@ -5,8 +5,17 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trials of the Lost Player</title>
-    <script type="module" crossorigin src="/assets/index-KjJy4tER.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-C9kyaxNk.css">
+
+    <!-- Preload critical assets for faster loading -->
+    <link rel="preload" as="image" href="/assets/b510_cjq1_210826-Br_1y82O.jpg" />
+    <link rel="preload" as="image" href="/assets/eldenring/background.png" />
+    <link rel="preload" as="audio" href="/assets/Game%20of%20Thrones-DgqkILjc.mp3" />
+
+    <!-- Performance optimization -->
+    <meta name="theme-color" content="#000000" />
+    <script type="module" crossorigin src="/assets/index-CzuHOC86.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-B_qR06A3.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-B8umsL0c.css">
   </head>
   <body>
     <div id="root"></div>

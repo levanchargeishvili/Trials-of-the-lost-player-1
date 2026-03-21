@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import GateMusic from '../components/GateMusic';
 import './EldenRingGate.css';
 
-const ANIMATION_PATH = '/assets/eldenring/knight/Colour1/NoOutline/120x80_gifs/';
+const getKnightAnimation = (filename) => new URL(`../assets/eldenring/knight/Colour1/NoOutline/120x80_gifs/${filename}`, import.meta.url).href;
 
 // Game Constants
 const KNIGHT_WIDTH = 280;
@@ -185,7 +185,7 @@ function EldenRingGate() {
   const [bossHealth, setBossHealth] = useState(BOSS_MAX_HEALTH);
   const [gameOver, setGameOver] = useState(false);
   const [victory, setVictory] = useState(false);
-  const [currentMusic, setCurrentMusic] = useState('/src/assets/audio/hava nagila.mp3');
+  const [currentMusic, setCurrentMusic] = useState(new URL('../assets/audio/hava nagila.mp3', import.meta.url).href);
 
   // Refs for game physics
   const knightPosRef = useRef({ x: 100, y: 0 });
@@ -329,55 +329,55 @@ function EldenRingGate() {
   // Load assets & Initialize positions
   useEffect(() => {
     const bgImg = new Image();
-    bgImg.src = '/assets/eldenring/background.png';
+    bgImg.src = new URL('../assets/eldenring/background.png', import.meta.url).href;
     backgroundImgRef.current = bgImg;
 
     const bossImg = new Image();
-    bossImg.src = '/assets/eldenring/boss.png';
+    bossImg.src = new URL('../assets/eldenring/boss.png', import.meta.url).href;
     bossImgRef.current = bossImg;
 
     const bossExhaustImg = new Image();
-    bossExhaustImg.src = '/assets/eldenring/boss_exhausted.png';
+    bossExhaustImg.src = new URL('../assets/eldenring/boss_exhausted.png', import.meta.url).href;
     bossExhaustImgRef.current = bossExhaustImg;
 
     const rocketImages = [];
     for (let i = 1; i <= 6; i++) {
       const img = new Image();
-      img.src = `/assets/eldenring/rockets/rocket${i}.png`;
+      img.src = new URL(`../assets/eldenring/rockets/rocket${i}.png`, import.meta.url).href;
       rocketImages.push(img);
     }
     rocketImgsRef.current = rocketImages;
 
     const floatImg = new Image();
-    floatImg.src = '/assets/eldenring/float.png';
+    floatImg.src = new URL('../assets/eldenring/float.png', import.meta.url).href;
     floatPlatformImgRef.current = floatImg;
 
     const droneImg = new Image();
-    droneImg.src = '/assets/eldenring/drone.png';
+    droneImg.src = new URL('../assets/eldenring/drone.png', import.meta.url).href;
     droneImgRef.current = droneImg;
 
     const cheeseImg = new Image();
-    cheeseImg.src = '/assets/eldenring/cheese.webp';
+    cheeseImg.src = new URL('../assets/eldenring/cheese.webp', import.meta.url).href;
     cheeseImgRef.current = cheeseImg;
 
     const ratRunImg = new Image();
-    ratRunImg.src = '/assets/eldenring/Rat/OutlinedRat/rat-run-outline.png';
+    ratRunImg.src = new URL('../assets/eldenring/Rat/OutlinedRat/rat-run-outline.png', import.meta.url).href;
     ratRunImgRef.current = ratRunImg;
 
     const ratIdleImg = new Image();
-    ratIdleImg.src = '/assets/eldenring/Rat/OutlinedRat/rat-idle-outline.png';
+    ratIdleImg.src = new URL('../assets/eldenring/Rat/OutlinedRat/rat-idle-outline.png', import.meta.url).href;
     ratIdleImgRef.current = ratIdleImg;
 
     const ratAttackImg = new Image();
-    ratAttackImg.src = '/assets/eldenring/Rat/OutlinedRat/rat-attack-outline.png';
+    ratAttackImg.src = new URL('../assets/eldenring/Rat/OutlinedRat/rat-attack-outline.png', import.meta.url).href;
     ratAttackImgRef.current = ratAttackImg;
 
     const coinImg = new Image();
-    coinImg.src = '/assets/eldenring/gold_coin.png';
+    coinImg.src = new URL('../assets/eldenring/gold_coin.png', import.meta.url).href;
     coinImgRef.current = coinImg;
 
     const soapImg = new Image();
-    soapImg.src = '/assets/eldenring/soap.png';
+    soapImg.src = new URL('../assets/eldenring/soap.png', import.meta.url).href;
     soapImgRef.current = soapImg;
 
     const now = Date.now();
@@ -1213,7 +1213,7 @@ function EldenRingGate() {
         if (currentPhase === 2) {
           spawnDrone();
           // Switch to hardtekk music
-          setCurrentMusic('/src/assets/audio/HAVA NAGILA (HARDTEKK).mp3');
+          setCurrentMusic(new URL('../assets/audio/HAVA NAGILA (HARDTEKK).mp3', import.meta.url).href);
         } else if (currentPhase === 3) {
           spawnRat();
           droneRef.current = null; // Remove drone
@@ -3214,7 +3214,7 @@ function EldenRingGate() {
 
       {/* Knight Character */}
       <img
-        src={ANIMATION_PATH + knightAnimation}
+        src={getKnightAnimation(knightAnimation)}
         alt="Knight"
         className={`knight-sprite ${facingDirection === 'left' ? 'flip-h' : ''} ${isDashingRef.current ? 'dashing' : ''}`}
         style={{

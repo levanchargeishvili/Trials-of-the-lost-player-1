@@ -102,12 +102,12 @@ const VERTEX_MAP = buildVertexMap();
 class CatanBoardGenerator {
   constructor() {
     this.resources = [
-      { type: 'wood', image: '/assets/catan/wood.png', name: 'Wood' },
-      { type: 'brick', image: '/assets/catan/brick.png', name: 'Brick' },
-      { type: 'sheep', image: '/assets/catan/sheep.png', name: 'Sheep' },
-      { type: 'wheat', image: '/assets/catan/wheat.png', name: 'Wheat' },
-      { type: 'ore', image: '/assets/catan/ore.png', name: 'Ore' },
-      { type: 'desert', image: '/assets/catan/desert.png', name: 'Desert' },
+      { type: 'wood', image: new URL('../assets/catan/wood.png', import.meta.url).href, name: 'Wood' },
+      { type: 'brick', image: new URL('../assets/catan/brick.png', import.meta.url).href, name: 'Brick' },
+      { type: 'sheep', image: new URL('../assets/catan/sheep.png', import.meta.url).href, name: 'Sheep' },
+      { type: 'wheat', image: new URL('../assets/catan/wheat.png', import.meta.url).href, name: 'Wheat' },
+      { type: 'ore', image: new URL('../assets/catan/ore.png', import.meta.url).href, name: 'Ore' },
+      { type: 'desert', image: new URL('../assets/catan/desert.png', import.meta.url).href, name: 'Desert' },
     ];
 
     // Standard Catan number distribution (no 7)
@@ -115,10 +115,10 @@ class CatanBoardGenerator {
 
     // Player settlement images (colors: purple, blue, red, green)
     this.playerSettlements = [
-      '/assets/catan/white.png',   // Player 1
-      '/assets/catan/blue.png',    // Player 2
-      '/assets/catan/red.png',     // Player 3
-      '/assets/catan/green.png',   // Player 4
+      new URL('../assets/catan/white.png', import.meta.url).href,   // Player 1
+      new URL('../assets/catan/blue.png', import.meta.url).href,    // Player 2
+      new URL('../assets/catan/red.png', import.meta.url).href,     // Player 3
+      new URL('../assets/catan/green.png', import.meta.url).href,   // Player 4
     ];
 
     this.board = this.generateBoard();

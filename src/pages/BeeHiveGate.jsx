@@ -4,26 +4,26 @@ import './BeeHiveGate.css';
 
 // List of 15-20 bee types (PNG images)
 const beeTypes = [
-  { id: 1, name: 'Hakari', rarity: 'GAMBLINGGGG', color: '#efcd08', image: '/assets/bees-png/hakari.png' },
-  { id: 2, name: 'Jon Snow', rarity: 'MoGoat', color: '#FFA500', image: '/assets/bees-png/jon_snow.png' },
-  { id: 3, name: 'Tyrion Lannister', rarity: 'THE GOAT', color: '#FF4500', image: '/assets/bees-png/tyrion.png' },
-  { id: 4, name: 'Gojo', rarity: 'Sukuna', color: '#8B0000', image: '/assets/bees-png/gojo.png' },
-  { id: 5, name: 'Thukuna', rarity: 'GOJOOOO', color: '#00CED1', image: '/assets/bees-png/sukuna.png' },
-  { id: 6, name: 'Zoro', rarity: 'THE GOAT', color: '#ADFF2F', image: '/assets/bees-png/zoro.png' },
-  { id: 7, name: 'Vicious Bee', rarity: '+2 Stinger', color: '#FF69B4', image: '/assets/bees-png/vicious.png' },
-  { id: 8, name: 'MamaFlex', rarity: 'dedamovutyan chemi praktika', color: '#9400D3', image: '/assets/bees-png/mamflex.webp' },
-  { id: 9, name: 'Down D. Stairs', rarity: ':d', color: '#FF1493', image: '/assets/bees-png/stairs.png' },
-  { id: 10, name: 'Killua', rarity: 'THE GOAT', color: '#A0522D', image: '/assets/bees-png/killua.png' },
-  { id: 11, name: 'Irakli', rarity: 'BuzuBuzu', color: '#FFD700', image: '/assets/bees-png/irakli.png' },
-  { id: 12, name: 'Goris Vashli', rarity: 'Gemrieli', color: '#F0E68C', image: '/assets/bees-png/gori.jpeg' },
-  { id: 13, name: 'Mclovin', rarity: 'Sigma', color: '#8B4513', image: '/assets/bees-png/foggel.png' },
-  { id: 14, name: 'Bikentiis Qababi', rarity: 'Kutaisis Goatio', color: '#FF4500', image: '/assets/bees-png/bikentia.jpg' },
-  { id: 15, name: 'Horse', rarity: 'SUS', color: '#DC143C', image: '/assets/bees-png/horse.jpg' },
-  { id: 16, name: 'Microsoft Edge', rarity: 'Snail', color: '#DAA520', image: '/assets/bees-png/microsoft.webp' },
-  { id: 17, name: 'Radanh', rarity: 'Nightmare', color: '#8A2BE2', image: '/assets/bees-png/radanh.avif' },
-  { id: 18, name: 'Discord', rarity: 'W', color: '#2F4F4F', image: '/assets/bees-png/discord.png' },
-  { id: 19, name: 'Tskaltubos parki', rarity: 'Heaven', color: '#228B22', image: '/assets/bees-png/wyaltubo.jpg' },
-  { id: 20, name: 'Anbanis Koshk', rarity: 'Hell', color: '#FFB6C1', image: '/assets/bees-png/anban.jpg' },
+  { id: 1, name: 'Hakari', rarity: 'GAMBLINGGGG', color: '#efcd08', image: new URL('../assets/bees-png/hakari.png', import.meta.url).href },
+  { id: 2, name: 'Jon Snow', rarity: 'MoGoat', color: '#FFA500', image: new URL('../assets/bees-png/jon_snow.png', import.meta.url).href },
+  { id: 3, name: 'Tyrion Lannister', rarity: 'THE GOAT', color: '#FF4500', image: new URL('../assets/bees-png/tyrion.png', import.meta.url).href },
+  { id: 4, name: 'Gojo', rarity: 'Sukuna', color: '#8B0000', image: new URL('../assets/bees-png/gojo.png', import.meta.url).href },
+  { id: 5, name: 'Thukuna', rarity: 'GOJOOOO', color: '#00CED1', image: new URL('../assets/bees-png/sukuna.png', import.meta.url).href },
+  { id: 6, name: 'Zoro', rarity: 'THE GOAT', color: '#ADFF2F', image: new URL('../assets/bees-png/zoro.png', import.meta.url).href },
+  { id: 7, name: 'Vicious Bee', rarity: '+2 Stinger', color: '#FF69B4', image: new URL('../assets/bees-png/vicious.png', import.meta.url).href },
+  { id: 8, name: 'MamaFlex', rarity: 'dedamovutyan chemi praktika', color: '#9400D3', image: new URL('../assets/bees-png/mamflex.webp', import.meta.url).href },
+  { id: 9, name: 'Down D. Stairs', rarity: ':d', color: '#FF1493', image: new URL('../assets/bees-png/stairs.png', import.meta.url).href },
+  { id: 10, name: 'Killua', rarity: 'THE GOAT', color: '#A0522D', image: new URL('../assets/bees-png/killua.png', import.meta.url).href },
+  { id: 11, name: 'Irakli', rarity: 'BuzuBuzu', color: '#FFD700', image: new URL('../assets/bees-png/irakli.png', import.meta.url).href },
+  { id: 12, name: 'Goris Vashli', rarity: 'Gemrieli', color: '#F0E68C', image: new URL('../assets/bees-png/gori.jpeg', import.meta.url).href },
+  { id: 13, name: 'Mclovin', rarity: 'Sigma', color: '#8B4513', image: new URL('../assets/bees-png/foggel.png', import.meta.url).href },
+  { id: 14, name: 'Bikentiis Qababi', rarity: 'Kutaisis Goatio', color: '#FF4500', image: new URL('../assets/bees-png/bikentia.jpg', import.meta.url).href },
+  { id: 15, name: 'Horse', rarity: 'SUS', color: '#DC143C', image: new URL('../assets/bees-png/horse.jpg', import.meta.url).href },
+  { id: 16, name: 'Microsoft Edge', rarity: 'Snail', color: '#DAA520', image: new URL('../assets/bees-png/microsoft.webp', import.meta.url).href },
+  { id: 17, name: 'Radanh', rarity: 'Nightmare', color: '#8A2BE2', image: new URL('../assets/bees-png/radanh.avif', import.meta.url).href },
+  { id: 18, name: 'Discord', rarity: 'W', color: '#2F4F4F', image: new URL('../assets/bees-png/discord.png', import.meta.url).href },
+  { id: 19, name: 'Tskaltubos parki', rarity: 'Heaven', color: '#228B22', image: new URL('../assets/bees-png/wyaltubo.jpg', import.meta.url).href },
+  { id: 20, name: 'Anbanis Koshk', rarity: 'Hell', color: '#FFB6C1', image: new URL('../assets/bees-png/anban.jpg', import.meta.url).href },
 ];
 
 function BeeHiveGate() {
@@ -140,7 +140,7 @@ function BeeHiveGate() {
 
     if (hakariInHive) {
       // Play Hakari audio
-      const audio = new Audio('/assets/hakari-audio.mp3');
+      const audio = new Audio(new URL('../assets/bee-audio/hakari.mp3', import.meta.url).href);
       audio.volume = 0.7;
 
       // Handle audio playback
@@ -298,7 +298,7 @@ function BeeHiveGate() {
   return (
     <div className="beehive-container">
 
-      <GateMusic src="/src/assets/audio/Bee Swarm Simulator  OST - Wax.mp3" />
+      <GateMusic src={new URL('../assets/audio/Bee Swarm Simulator  OST - Wax.mp3', import.meta.url).href} />
 
       <div className="stars"></div>
       <div className="twinkling"></div>
@@ -317,7 +317,7 @@ function BeeHiveGate() {
                 {Array(eggs).fill(0).map((_, i) => (
                   <img
                     key={i}
-                    src="/assets/eggs-items/royal-jelly.png"
+                    src={new URL('../assets/eggs-items/royal-jelly.png', import.meta.url).href}
                     alt="Royal Jelly"
                     className="egg"
                     draggable
@@ -548,7 +548,7 @@ function BeeHiveGate() {
                   </div>
                 ) : (
                   <img
-                    src="/assets/meteor.png"
+                    src={new URL('../assets/eldenring/Gemini_Generated_Image_ivwmizivwmizivwm.png', import.meta.url).href}
                     alt="Meteor"
                     className="meteor-rock"
                   />

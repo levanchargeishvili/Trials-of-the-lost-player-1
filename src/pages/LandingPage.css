@@ -22,7 +22,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: url('/pointer-cursor.png') 48 12, auto;
+  cursor: url('../assets/pointer-cursor.png') 48 12, auto;
 }
 
 /* Animated starfield background */
@@ -372,7 +372,7 @@
 
 /* Override cursor for clickable elements */
 button, a, input[type="range"] {
-  cursor: url('/pointer-cursor.png') 48 12, pointer;
+  cursor: url('../assets/pointer-cursor.png') 48 12, pointer;
 }
 
 /* Error Message */

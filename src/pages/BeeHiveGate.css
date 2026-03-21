@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: url('/pointer-cursor.png') 48 12, auto;
+  cursor: url('../assets/pointer-cursor.png') 48 12, auto;
 }
 
 /* Dev Navigation (same as landing page) */

@@ -16,13 +16,13 @@ const BOSS_WIDTH = 700;
 const BOSS_HEIGHT = 500;
 const ROCKET_WIDTH = 60;
 const ROCKET_HEIGHT = 30;
-const HITBOX_SCALE = 0.8;
+const HITBOX_SCALE = 0.7; // Tighter projectile hitboxes = more forgiving for player
 // Knight sprite is 120x80 intrinsic inside 280x200 frame
 // The actual visible knight is ~35x55px within the 120x80 sprite
 // At 280x200 scale: visible knight is ~82x137px
-const KNIGHT_HITBOX_WIDTH_SCALE = 0.12;   // 280 * 0.12 = ~34px (tight around body)
-const KNIGHT_HITBOX_HEIGHT_SCALE = 0.28;  // 200 * 0.28 = ~56px (tight around body)
-const KNIGHT_HITBOX_Y_OFFSET_SCALE = 0.45; // Offset to center on visible knight body
+const KNIGHT_HITBOX_WIDTH_SCALE = 0.20;   // 280 * 0.20 = ~56px (fairer body hitbox)
+const KNIGHT_HITBOX_HEIGHT_SCALE = 0.40;  // 200 * 0.40 = ~80px (fairer body hitbox)
+const KNIGHT_HITBOX_Y_OFFSET_SCALE = 0.35; // Offset to center on visible knight body
 
 // Boss Fight Constants
 const BOSS_MAX_HEALTH = 1000;
@@ -106,12 +106,14 @@ const PHASE_TIMELINES = {
   ],
   2: [ // PHASE 2 - Drone War (30s loop)
     { time: 0, action: 'homingSwarm' },
-    { time: 4, action: 'droneShield' },        // Drone creates shield around boss
-    { time: 8, action: 'droneLaser' },          // Drone fires sweeping laser
+    { time: 3, action: 'droneTether' },          // NEW: Tether heals boss if not broken
+    { time: 6, action: 'droneShield' },           // Drone creates shield around boss
+    { time: 8, action: 'droneLaser' },            // Drone fires sweeping laser
     { time: 10, action: 'soapThrow' },
     { time: 12, action: 'homingSwarm' },
     { time: 16, action: 'diagonalRain', angle: 'left' },
-    { time: 20, action: 'droneEMP' },           // Drone EMP - screen flash, coins fall
+    { time: 19, action: 'droneTether' },          // NEW: Second tether
+    { time: 20, action: 'droneEMP' },             // Drone EMP - screen flash, coins fall
     { time: 24, action: 'homingSwarm' },
     { time: 26, action: 'soapThrow' },
     { time: 28, action: 'diagonalRain', angle: 'right' },
@@ -119,13 +121,16 @@ const PHASE_TIMELINES = {
   ],
   3: [ // PHASE 3 - Rat King (25s loop)
     { time: 0, action: 'cheeseThrow' },
-    { time: 3, action: 'summonMiniRats' },      // Mini rats swarm
+    { time: 2, action: 'ratVFormation' },         // NEW: V-formation mini rats charge
+    { time: 5, action: 'ratBurrow' },             // NEW: Rat digs underground, erupts
     { time: 6, action: 'cheeseThrow' },
-    { time: 9, action: 'cheeseMinefield' },     // Cheese mines on ground
+    { time: 9, action: 'cheeseMinefield' },       // Cheese mines on ground
     { time: 11, action: 'soapThrow' },
     { time: 12, action: 'rocketRain' },
-    { time: 15, action: 'ratRage' },             // Rat goes berserk, speed doubles
+    { time: 14, action: 'ratBurrow' },            // NEW: Second burrow
+    { time: 15, action: 'ratRage' },              // Rat goes berserk, speed doubles
     { time: 18, action: 'cheeseThrow' },
+    { time: 19, action: 'ratVFormation' },        // NEW: Another V-formation
     { time: 20, action: 'diveBomb' },
     { time: 23, action: 'coinBarrage' },
     { time: 25, action: 'rocketRain' },
@@ -197,7 +202,7 @@ function EldenRingGate() {
   const isAttackingRef = useRef(false);
 
   // Asset Refs
-  const backgroundImgRef = useRef(null);
+  const backgroundVideoRef = useRef(null);
   const bossImgRef = useRef(null);
   const bossExhaustImgRef = useRef(null);
   const rocketImgsRef = useRef([]);
@@ -304,6 +309,24 @@ function EldenRingGate() {
   const miniRatsRef = useRef([]);
   const cheeseTrapsRef = useRef([]);
 
+  // Drone tether (Phase 2 - heals boss if not broken)
+  const droneTetherRef = useRef(null);
+
+  // Rat burrow (Phase 3 - digs underground, erupts under player)
+  const ratBurrowRef = useRef(null);
+
+  // Cheese trail (Phase 3 - slows player)
+  const cheeseTrailRef = useRef([]);
+  const isSlowedRef = useRef(false);
+  const slowEndTimeRef = useRef(0);
+
+  // Boss desperation mode (Phase 4 - below 100 HP)
+  const bossDesperationRef = useRef(false);
+
+  // Victory slow-mo
+  const victorySlowMoRef = useRef(false);
+  const victorySlowMoEndRef = useRef(0);
+
   // Combo counter
   const comboCountRef = useRef(0);
   const comboTimerRef = useRef(0);
@@ -328,10 +351,6 @@ function EldenRingGate() {
 
   // Load assets & Initialize positions
   useEffect(() => {
-    const bgImg = new Image();
-    bgImg.src = new URL('../assets/eldenring/background.png', import.meta.url).href;
-    backgroundImgRef.current = bgImg;
-
     const bossImg = new Image();
     bossImg.src = new URL('../assets/eldenring/boss.png', import.meta.url).href;
     bossImgRef.current = bossImg;
@@ -513,6 +532,15 @@ function EldenRingGate() {
           if (distance < 300) {
             droneHealthRef.current = Math.max(0, droneHealthRef.current - 20);
             triggerScreenShake(3, 150);
+            // Break tether if active
+            if (droneTetherRef.current && !droneTetherRef.current.broken) {
+              droneTetherRef.current.broken = true;
+              droneTetherRef.current = null;
+              styleTextRef.current.push({
+                text: 'TETHER BROKEN!', x: drone.x, y: drone.y - 20,
+                time: Date.now(), color: '#44ddff',
+              });
+            }
             console.log(`🤖 Drone hit! HP: ${droneHealthRef.current}`);
           }
         }
@@ -529,7 +557,7 @@ function EldenRingGate() {
         });
 
         // Phase 3: Attack Rat Weak Point
-        if (ratRef.current) {
+        if (ratRef.current && !ratRef.current.burrowed) {
           const ratCenterX = ratRef.current.x + P3_RAT_WIDTH / 2;
           const ratCenterY = ratRef.current.y + P3_RAT_HEIGHT / 2;
           const distance = Math.sqrt(
@@ -541,6 +569,19 @@ function EldenRingGate() {
             triggerScreenShake(4, 200);
             console.log(`🐀 Rat hit! HP: ${ratWeakPointHPRef.current}`);
           }
+        }
+
+        // Phase 4: Attack clones - fake clones explode!
+        if (bossClonesRef.current.length > 0) {
+          bossClonesRef.current.forEach(clone => {
+            if (clone.isReal) return; // Don't explode real boss
+            const cloneCX = clone.x + BOSS_WIDTH / 2;
+            const cloneCY = clone.y + BOSS_HEIGHT / 2;
+            const dist = Math.sqrt((cloneCX - playerX) ** 2 + (cloneCY - playerY) ** 2);
+            if (dist < 500) {
+              fakeCloneExplosion(clone.x, clone.y);
+            }
+          });
         }
 
         setTimeout(() => {
@@ -1105,6 +1146,111 @@ function EldenRingGate() {
     triggerScreenShake(5, 400);
   }
 
+  // ===== NEW CREATIVE ATTACKS - PHASE 2 =====
+
+  function droneTether() {
+    if (!droneRef.current) return;
+    console.log('⚡ Drone Tether! Break it or boss heals!');
+    droneTetherRef.current = {
+      startTime: Date.now(),
+      duration: 5000, // 5 seconds to break
+      healAmount: 50,
+      broken: false,
+    };
+    triggerScreenShake(3, 200);
+  }
+
+  // ===== NEW CREATIVE ATTACKS - PHASE 3 =====
+
+  function ratBurrow() {
+    if (!ratRef.current) return;
+    console.log('🕳️ Rat Burrow! Watch the ground!');
+    const playerX = knightPosRef.current.x + KNIGHT_WIDTH / 2;
+    ratBurrowRef.current = {
+      startTime: Date.now(),
+      telegraphDuration: 2000, // 2s warning
+      eruptTime: Date.now() + 2000,
+      targetX: playerX,
+      targetY: canvasSize.height - PLATFORM_HEIGHT,
+      radius: 120,
+      erupted: false,
+    };
+    // Hide rat during burrow
+    ratRef.current.burrowed = true;
+    triggerScreenShake(4, 300);
+  }
+
+  function cheeseTrailDrop() {
+    if (!ratRef.current || ratRef.current.burrowed) return;
+    const rat = ratRef.current;
+    cheeseTrailRef.current.push({
+      id: Date.now() + Math.random(),
+      x: rat.x + P3_RAT_WIDTH / 2,
+      y: canvasSize.height - PLATFORM_HEIGHT - 10,
+      width: 40,
+      height: 10,
+      endTime: Date.now() + 6000,
+    });
+  }
+
+  function ratVFormation() {
+    if (!ratRef.current) return;
+    console.log('🐀🐀 V-Formation Charge!');
+    const rat = ratRef.current;
+    const playerX = knightPosRef.current.x + KNIGHT_WIDTH / 2;
+    const playerY = knightPosRef.current.y + KNIGHT_HEIGHT / 2;
+    const baseAngle = Math.atan2(playerY - rat.y, playerX - rat.x);
+
+    for (let i = 0; i < 5; i++) {
+      const offset = (i - 2) * 0.25; // V spread angle
+      const delay = Math.abs(i - 2) * 80; // Wings spawn slightly later
+      const angle = baseAngle + offset;
+      const speed = 4;
+      setTimeout(() => {
+        miniRatsRef.current.push({
+          id: Date.now() + i,
+          x: rat.x + P3_RAT_WIDTH / 2,
+          y: rat.y + P3_RAT_HEIGHT / 2,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          hp: 1,
+          frame: 0,
+          frameTime: Date.now(),
+          size: 55,
+          formation: true, // Don't chase, keep straight line
+        });
+      }, delay);
+    }
+    triggerScreenShake(3, 200);
+  }
+
+  // ===== NEW CREATIVE ATTACKS - PHASE 4 =====
+
+  function fakeCloneExplosion(cloneX, cloneY) {
+    console.log('💥 Fake clone exploded!');
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI * 2 / 6) * i;
+      const speed = 5;
+      rocketsRef.current.push({
+        id: Date.now() + Math.random() + i,
+        x: cloneX + BOSS_WIDTH / 2,
+        y: cloneY + BOSS_HEIGHT / 2,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        type: Math.floor(Math.random() * 6) + 1,
+        tracking: false,
+        speed: speed,
+        shower: true,
+        small: true,
+      });
+    }
+    triggerScreenShake(6, 400);
+    styleTextRef.current.push({
+      text: 'WRONG CLONE!', x: cloneX + BOSS_WIDTH / 2, y: cloneY,
+      time: Date.now(), color: '#ff2222',
+    });
+  }
+
   // Main Physics & Game Loop
   useEffect(() => {
     if (gameOver || victory) return;
@@ -1122,6 +1268,11 @@ function EldenRingGate() {
       // Block movement while slipping
       if (isSlippingRef.current) {
         moveSpeed = 0;
+      }
+
+      // Slow from cheese trail
+      if (isSlowedRef.current) {
+        moveSpeed *= 0.5;
       }
 
       // Dash logic
@@ -1311,6 +1462,15 @@ function EldenRingGate() {
                   case 'soapThrow':
                     soapThrow();
                     break;
+                  case 'droneTether':
+                    droneTether();
+                    break;
+                  case 'ratBurrow':
+                    ratBurrow();
+                    break;
+                  case 'ratVFormation':
+                    ratVFormation();
+                    break;
                 }
               }
             });
@@ -1344,8 +1504,9 @@ function EldenRingGate() {
             droneFire();
           }
 
-          // Phase 4: Continuous rocket storm (less frequent to reduce lag)
-          if (currentPhase === 4 && rocketStormActiveRef.current && phaseTime % 1 < 0.016) {
+          // Phase 4: Continuous rocket storm (faster in desperation mode)
+          const stormInterval = bossDesperationRef.current ? 0.6 : 1;
+          if (currentPhase === 4 && rocketStormActiveRef.current && phaseTime % stormInterval < 0.016) {
             fireStormRocket();
           }
 
@@ -1444,11 +1605,23 @@ function EldenRingGate() {
           break;
       }
 
-      // Check victory
+      // Check victory with dramatic slow-mo
       if (bossHealthRef.current <= 0 && bossStateRef.current !== BOSS_DEAD) {
         bossStateRef.current = BOSS_DEAD;
-        victoryRef.current = true;
-        setVictory(true);
+        // Dramatic slow-mo before victory screen
+        victorySlowMoRef.current = true;
+        victorySlowMoEndRef.current = now + 1500;
+        triggerScreenShake(15, 800);
+        damageFlashRef.current = now + 600;
+        styleTextRef.current.push({
+          text: 'BOSS DEFEATED!', x: canvasSize.width / 2, y: canvasSize.height / 2 - 80,
+          time: now, color: '#ffdd00',
+        });
+        // Delay victory screen for dramatic effect
+        setTimeout(() => {
+          victoryRef.current = true;
+          setVictory(true);
+        }, 1500);
       }
 
       // ===== UPDATE PHASE ENTITIES =====
@@ -1519,7 +1692,7 @@ function EldenRingGate() {
       });
 
       // Phase 3: Update Rat (flies around the map)
-      if (ratRef.current) {
+      if (ratRef.current && !ratRef.current.burrowed) {
         ratRef.current.x += ratRef.current.vx;
         ratRef.current.y += (ratRef.current.vy || 0);
 
@@ -2027,14 +2200,17 @@ function EldenRingGate() {
 
       // ===== MINI RATS UPDATE =====
       miniRatsRef.current = miniRatsRef.current.filter(mr => {
-        // Chase player
-        const playerX = knightPosRef.current.x + KNIGHT_WIDTH / 2;
-        const playerY = knightPosRef.current.y + KNIGHT_HEIGHT / 2;
-        const dx = playerX - mr.x;
-        const dy = playerY - mr.y;
-        const mag = Math.sqrt(dx * dx + dy * dy) || 1;
-        mr.vx = (dx / mag) * 3;
-        mr.vy = (dy / mag) * 3;
+        if (!mr.formation) {
+          // Chase player (normal behavior)
+          const playerX = knightPosRef.current.x + KNIGHT_WIDTH / 2;
+          const playerY = knightPosRef.current.y + KNIGHT_HEIGHT / 2;
+          const dx = playerX - mr.x;
+          const dy = playerY - mr.y;
+          const mag = Math.sqrt(dx * dx + dy * dy) || 1;
+          mr.vx = (dx / mag) * 3;
+          mr.vy = (dy / mag) * 3;
+        }
+        // Formation rats keep their initial velocity
         mr.x += mr.vx;
         mr.y += mr.vy;
 
@@ -2088,6 +2264,94 @@ function EldenRingGate() {
         }
         return true;
       });
+
+      // ===== DRONE TETHER UPDATE =====
+      if (droneTetherRef.current && droneRef.current) {
+        const tether = droneTetherRef.current;
+        const tetherElapsed = now - tether.startTime;
+        if (tetherElapsed >= tether.duration && !tether.broken) {
+          // Tether not broken in time - boss heals!
+          const newHP = Math.min(BOSS_MAX_HEALTH, bossHealthRef.current + tether.healAmount);
+          bossHealthRef.current = newHP;
+          setBossHealth(newHP);
+          styleTextRef.current.push({
+            text: `BOSS HEALED +${tether.healAmount}!`,
+            x: bossPosRef.current.x + BOSS_WIDTH / 2,
+            y: bossPosRef.current.y,
+            time: now, color: '#44ff44',
+          });
+          triggerScreenShake(5, 300);
+          droneTetherRef.current = null;
+        } else if (tetherElapsed >= tether.duration) {
+          droneTetherRef.current = null;
+        }
+        // Break tether if drone takes damage (handled in attack click)
+      }
+      if (!droneRef.current) droneTetherRef.current = null;
+
+      // ===== RAT BURROW UPDATE =====
+      if (ratBurrowRef.current) {
+        const burrow = ratBurrowRef.current;
+        if (!burrow.erupted && now >= burrow.eruptTime) {
+          burrow.erupted = true;
+          // Erupt! Damage player if in radius
+          const playerX = knightPosRef.current.x + KNIGHT_WIDTH / 2;
+          const playerY = knightPosRef.current.y + KNIGHT_HEIGHT / 2;
+          const dist = Math.sqrt((playerX - burrow.targetX) ** 2 + (playerY - burrow.targetY) ** 2);
+          if (dist < burrow.radius && !isInvulnerableRef.current) {
+            const newHP = Math.max(0, playerHealthRef.current - 18);
+            playerHealthRef.current = newHP;
+            setPlayerHealth(newHP);
+            if (newHP <= 0) { gameOverRef.current = true; setGameOver(true); }
+          }
+          triggerScreenShake(10, 600);
+          // Unhide rat at eruption point
+          if (ratRef.current) {
+            ratRef.current.burrowed = false;
+            ratRef.current.x = burrow.targetX - P3_RAT_WIDTH / 2;
+            ratRef.current.y = canvasSize.height - PLATFORM_HEIGHT - P3_RAT_HEIGHT - 20;
+          }
+          // Clean up after 500ms
+          setTimeout(() => { ratBurrowRef.current = null; }, 500);
+        }
+      }
+
+      // ===== CHEESE TRAIL UPDATE =====
+      cheeseTrailRef.current = cheeseTrailRef.current.filter(trail => {
+        if (now > trail.endTime) return false;
+        // Check player collision - slow them down
+        if (!isInvulnerableRef.current) {
+          const knightHitbox = getKnightHitbox(knightPosRef.current);
+          if (knightHitbox.left < trail.x + trail.width && knightHitbox.right > trail.x &&
+              knightHitbox.bottom > trail.y && knightHitbox.top < trail.y + trail.height) {
+            isSlowedRef.current = true;
+            slowEndTimeRef.current = now + 2000;
+          }
+        }
+        return true;
+      });
+      // Slow expiry
+      if (isSlowedRef.current && now >= slowEndTimeRef.current) {
+        isSlowedRef.current = false;
+      }
+
+      // ===== BOSS DESPERATION MODE (Phase 4, below 100 HP) =====
+      if (currentPhaseRef.current === 4 && bossHealthRef.current <= 100 && !bossDesperationRef.current) {
+        bossDesperationRef.current = true;
+        triggerScreenShake(12, 800);
+        styleTextRef.current.push({
+          text: 'BOSS ENRAGED!', x: canvasSize.width / 2, y: canvasSize.height / 2 - 100,
+          time: now, color: '#ff0000',
+        });
+        console.log('💀 BOSS DESPERATION MODE!');
+      }
+
+      // ===== CHEESE TRAIL DROP (Phase 3 - rat drops trail while moving) =====
+      if (ratRef.current && !ratRef.current.burrowed && currentPhaseRef.current === 3) {
+        if (Math.random() < 0.02) { // ~1 trail drop per second
+          cheeseTrailDrop();
+        }
+      }
 
       // ===== DRONE LASER UPDATE =====
       if (droneLaserRef.current) {
@@ -2186,23 +2450,8 @@ function EldenRingGate() {
       // Disable smoothing for pixel art
       ctx.imageSmoothingEnabled = false;
 
-      // ===== BACKGROUND - Dark Fantasy Atmosphere =====
-      if (backgroundImgRef.current?.complete && backgroundImgRef.current.naturalWidth > 0) {
-        ctx.drawImage(backgroundImgRef.current, 0, 0, canvasSize.width, canvasSize.height);
-      } else {
-        // Dark fantasy gradient - storm atmosphere
-        const gradient = ctx.createLinearGradient(0, 0, 0, canvasSize.height);
-        gradient.addColorStop(0, '#0E0F12');      // Near Black (top)
-        gradient.addColorStop(0.3, '#1A1C1F');    // Deep Charcoal
-        gradient.addColorStop(0.6, '#3A3F46');    // Storm Gray
-        gradient.addColorStop(1, '#4A5561');      // Blue-Gray (bottom)
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
-
-        // Add atmospheric fog effect
-        ctx.fillStyle = 'rgba(106, 112, 120, 0.15)'; // Ash Gray overlay
-        ctx.fillRect(0, canvasSize.height * 0.4, canvasSize.width, canvasSize.height * 0.6);
-      }
+      // ===== BACKGROUND - transparent so video shows through =====
+      ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
 
       // ===== FLOATING PLATFORM - Using float.png =====
       const platformY = canvasSize.height - PLATFORM_HEIGHT;
@@ -2302,7 +2551,7 @@ function EldenRingGate() {
       }
 
       // ===== PHASE 3: RAT =====
-      if (ratRef.current) {
+      if (ratRef.current && !ratRef.current.burrowed) {
         const rat = ratRef.current;
         const frame = ratFrameRef.current;
 
@@ -2765,22 +3014,186 @@ function EldenRingGate() {
         ctx.restore();
       });
 
-      // ===== DRONE SHIELD =====
+      // ===== DRONE SHIELD (with crackle effect) =====
       if (droneShieldActiveRef.current && droneRef.current) {
         ctx.save();
-        ctx.globalAlpha = 0.3 + Math.sin(now * 0.005) * 0.15;
-        ctx.strokeStyle = '#44aaff';
-        ctx.lineWidth = 4;
         const shieldCx = bossPosRef.current.x + BOSS_WIDTH / 2;
         const shieldCy = bossPosRef.current.y + BOSS_HEIGHT / 2;
         const shieldR = BOSS_WIDTH * 0.4;
+        // Outer hexagonal shield segments
+        ctx.globalAlpha = 0.35 + Math.sin(now * 0.005) * 0.15;
+        ctx.strokeStyle = '#44aaff';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#4488ff';
+        ctx.shadowBlur = 15;
+        for (let seg = 0; seg < 6; seg++) {
+          const startAngle = (Math.PI * 2 / 6) * seg + now * 0.001;
+          const endAngle = startAngle + Math.PI * 2 / 6 - 0.1;
+          ctx.beginPath();
+          ctx.arc(shieldCx, shieldCy, shieldR, startAngle, endAngle);
+          ctx.stroke();
+        }
+        // Electric crackle arcs
+        ctx.globalAlpha = 0.5;
+        ctx.strokeStyle = '#88ddff';
+        ctx.lineWidth = 2;
+        for (let c = 0; c < 3; c++) {
+          const angle1 = (now * 0.003 + c * 2.1) % (Math.PI * 2);
+          const angle2 = angle1 + 0.3 + Math.sin(now * 0.01 + c) * 0.2;
+          const r1 = shieldR - 5 + Math.sin(now * 0.02 + c) * 8;
+          const r2 = shieldR + 5 + Math.cos(now * 0.015 + c) * 6;
+          ctx.beginPath();
+          ctx.moveTo(shieldCx + Math.cos(angle1) * r1, shieldCy + Math.sin(angle1) * r1);
+          const midAngle = (angle1 + angle2) / 2;
+          ctx.lineTo(shieldCx + Math.cos(midAngle) * (shieldR + 15), shieldCy + Math.sin(midAngle) * (shieldR + 15));
+          ctx.lineTo(shieldCx + Math.cos(angle2) * r2, shieldCy + Math.sin(angle2) * r2);
+          ctx.stroke();
+        }
+        // Inner glow
+        ctx.globalAlpha = 0.08;
+        ctx.fillStyle = '#4488ff';
         ctx.beginPath();
         ctx.arc(shieldCx, shieldCy, shieldR, 0, Math.PI * 2);
-        ctx.stroke();
-        // Inner glow
-        ctx.globalAlpha = 0.1;
-        ctx.fillStyle = '#4488ff';
         ctx.fill();
+        ctx.restore();
+      }
+
+      // ===== DRONE TETHER =====
+      if (droneTetherRef.current && droneRef.current) {
+        const tether = droneTetherRef.current;
+        const tetherAge = now - tether.startTime;
+        const tetherProgress = tetherAge / tether.duration;
+        const droneX = droneRef.current.x + P2_DRONE_WIDTH / 2;
+        const droneY = droneRef.current.y + P2_DRONE_HEIGHT / 2;
+        const bossX = bossPosRef.current.x + BOSS_WIDTH / 2;
+        const bossY = bossPosRef.current.y + BOSS_HEIGHT / 2;
+
+        ctx.save();
+        // Electric tether line
+        ctx.strokeStyle = tetherProgress > 0.7 ? '#ff4444' : '#44aaff';
+        ctx.lineWidth = 3 + Math.sin(now * 0.02) * 2;
+        ctx.shadowColor = tetherProgress > 0.7 ? '#ff0000' : '#4488ff';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.moveTo(droneX, droneY);
+        // Zigzag path
+        const steps = 8;
+        for (let i = 1; i <= steps; i++) {
+          const t = i / steps;
+          const mx = droneX + (bossX - droneX) * t;
+          const my = droneY + (bossY - droneY) * t;
+          const jitter = (Math.sin(now * 0.03 + i * 2) * 15);
+          ctx.lineTo(mx + jitter, my + jitter * 0.5);
+        }
+        ctx.stroke();
+
+        // Warning text
+        ctx.font = 'bold 14px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = tetherProgress > 0.7 ? '#ff4444' : '#44aaff';
+        ctx.fillText(tetherProgress > 0.7 ? 'BREAK IT!' : 'TETHER!',
+          (droneX + bossX) / 2, (droneY + bossY) / 2 - 20);
+        // Timer bar
+        ctx.fillStyle = '#222';
+        ctx.fillRect((droneX + bossX) / 2 - 30, (droneY + bossY) / 2 - 10, 60, 6);
+        ctx.fillStyle = tetherProgress > 0.7 ? '#ff2222' : '#44aaff';
+        ctx.fillRect((droneX + bossX) / 2 - 30, (droneY + bossY) / 2 - 10, 60 * tetherProgress, 6);
+        ctx.restore();
+      }
+
+      // ===== RAT BURROW TELEGRAPH =====
+      if (ratBurrowRef.current && !ratBurrowRef.current.erupted) {
+        const burrow = ratBurrowRef.current;
+        const burrowAge = now - burrow.startTime;
+        const burrowProgress = burrowAge / burrow.telegraphDuration;
+        ctx.save();
+        // Pulsing circle on ground where rat will erupt
+        ctx.globalAlpha = 0.3 + burrowProgress * 0.4;
+        ctx.strokeStyle = '#ff4400';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#ff2200';
+        ctx.shadowBlur = 10 + burrowProgress * 15;
+        ctx.beginPath();
+        ctx.arc(burrow.targetX, burrow.targetY - 10, burrow.radius * burrowProgress, 0, Math.PI * 2);
+        ctx.stroke();
+        // Inner warning
+        ctx.fillStyle = 'rgba(255, 68, 0, 0.1)';
+        ctx.fill();
+        // Crack lines
+        for (let c = 0; c < 6; c++) {
+          const angle = (Math.PI * 2 / 6) * c + now * 0.002;
+          const len = burrow.radius * burrowProgress * 0.6;
+          ctx.beginPath();
+          ctx.moveTo(burrow.targetX, burrow.targetY - 10);
+          ctx.lineTo(burrow.targetX + Math.cos(angle) * len, burrow.targetY - 10 + Math.sin(angle) * len);
+          ctx.stroke();
+        }
+        ctx.font = 'bold 16px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#ff4400';
+        ctx.fillText('!', burrow.targetX, burrow.targetY - 30);
+        ctx.restore();
+      }
+      // Burrow eruption effect
+      if (ratBurrowRef.current && ratBurrowRef.current.erupted) {
+        const burrow = ratBurrowRef.current;
+        ctx.save();
+        ctx.globalAlpha = 0.6;
+        ctx.fillStyle = '#ff6600';
+        ctx.shadowColor = '#ff4400';
+        ctx.shadowBlur = 30;
+        ctx.beginPath();
+        ctx.arc(burrow.targetX, burrow.targetY - 10, burrow.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // ===== CHEESE TRAIL =====
+      cheeseTrailRef.current.forEach(trail => {
+        ctx.save();
+        ctx.globalAlpha = 0.4;
+        ctx.fillStyle = '#ccaa33';
+        ctx.fillRect(trail.x - trail.width / 2, trail.y, trail.width, trail.height);
+        // Shiny spots
+        ctx.globalAlpha = 0.6;
+        ctx.fillStyle = '#ffdd44';
+        ctx.beginPath();
+        ctx.arc(trail.x, trail.y + trail.height / 2, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      // ===== BOSS DESPERATION EFFECT =====
+      if (bossDesperationRef.current && bossStateRef.current !== BOSS_DEAD) {
+        // Deep red pulsing vignette
+        const despPulse = 0.15 + Math.sin(now * 0.006) * 0.08;
+        const despGrad = ctx.createRadialGradient(
+          canvasSize.width / 2, canvasSize.height / 2, canvasSize.height * 0.2,
+          canvasSize.width / 2, canvasSize.height / 2, canvasSize.height * 0.7
+        );
+        despGrad.addColorStop(0, 'rgba(0,0,0,0)');
+        despGrad.addColorStop(1, `rgba(120,0,0,${despPulse})`);
+        ctx.fillStyle = despGrad;
+        ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
+        // Edge flicker
+        ctx.save();
+        ctx.globalAlpha = 0.15 + Math.sin(now * 0.008) * 0.1;
+        ctx.fillStyle = '#440000';
+        ctx.fillRect(0, 0, 20, canvasSize.height);
+        ctx.fillRect(canvasSize.width - 20, 0, 20, canvasSize.height);
+        ctx.fillRect(0, 0, canvasSize.width, 10);
+        ctx.restore();
+      }
+
+      // ===== SLOW INDICATOR =====
+      if (isSlowedRef.current) {
+        ctx.save();
+        ctx.font = 'bold 14px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#ccaa33';
+        ctx.shadowColor = '#ccaa33';
+        ctx.shadowBlur = 8;
+        ctx.fillText('SLOWED!', knightPosRef.current.x + KNIGHT_WIDTH / 2, knightPosRef.current.y - 10);
         ctx.restore();
       }
 
@@ -2844,14 +3257,24 @@ function EldenRingGate() {
       // ===== PARRY FLASH on knight =====
       if (now < parryFlashRef.current) {
         ctx.save();
-        ctx.globalAlpha = 0.5;
-        ctx.strokeStyle = '#ffff00';
-        ctx.lineWidth = 5;
         const hb = getKnightHitbox(knightPosRef.current);
         const flashCx = (hb.left + hb.right) / 2;
-        const flashCy = (hb.top + hb.bottom) / 2 + 150;
+        const flashCy = (hb.top + hb.bottom) / 2;
+        // Bright golden burst effect at knight's center
+        ctx.globalAlpha = 0.6;
+        ctx.strokeStyle = '#ffff00';
+        ctx.lineWidth = 6;
+        ctx.shadowColor = '#ffdd00';
+        ctx.shadowBlur = 20;
         ctx.beginPath();
-        ctx.arc(flashCx, flashCy, 55, 0, Math.PI * 2);
+        ctx.arc(flashCx, flashCy, 50, 0, Math.PI * 2);
+        ctx.stroke();
+        // Inner ring
+        ctx.globalAlpha = 0.8;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(flashCx, flashCy, 30, 0, Math.PI * 2);
         ctx.stroke();
         ctx.restore();
       }
@@ -2859,17 +3282,26 @@ function EldenRingGate() {
       // ===== PARRY READY INDICATOR =====
       if (isParryingRef.current) {
         ctx.save();
-        ctx.globalAlpha = 0.4 + Math.sin(now * 0.03) * 0.2;
-        ctx.strokeStyle = '#ffcc00';
-        ctx.lineWidth = 3;
         const hb2 = getKnightHitbox(knightPosRef.current);
         const kx = (hb2.left + hb2.right) / 2;
-        const ky = (hb2.top + hb2.bottom) / 2 + 150;
-        // Shield arc in front of player
+        const ky = (hb2.top + hb2.bottom) / 2;
+        // Shield arc in front of player at knight's center
         const dir = facingDirRef.current === 'right' ? 0 : Math.PI;
+        ctx.globalAlpha = 0.5 + Math.sin(now * 0.03) * 0.2;
+        ctx.strokeStyle = '#ffcc00';
+        ctx.lineWidth = 4;
+        ctx.shadowColor = '#ffaa00';
+        ctx.shadowBlur = 12;
         ctx.beginPath();
         ctx.arc(kx, ky, 45, dir - Math.PI / 3, dir + Math.PI / 3);
         ctx.stroke();
+        // Inner shield line
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = '#ffdd44';
+        ctx.beginPath();
+        ctx.arc(kx, ky, 42, dir - Math.PI / 4, dir + Math.PI / 4);
+        ctx.lineTo(kx, ky);
+        ctx.fill();
         ctx.restore();
       }
 
@@ -3164,6 +3596,29 @@ function EldenRingGate() {
         ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
       }
 
+      // ===== VICTORY SLOW-MO FLASH =====
+      if (victorySlowMoRef.current) {
+        const slowMoAge = now - (victorySlowMoEndRef.current - 1500);
+        const flashIntensity = Math.max(0, 0.4 - slowMoAge / 3000);
+        ctx.save();
+        ctx.globalAlpha = flashIntensity;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
+        ctx.restore();
+        // Dramatic text
+        ctx.save();
+        ctx.font = `bold ${36 + Math.sin(now * 0.005) * 4}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 5;
+        ctx.shadowColor = '#ffdd00';
+        ctx.shadowBlur = 20;
+        ctx.strokeText('VICTORY', canvasSize.width / 2, canvasSize.height / 2 - 40);
+        ctx.fillStyle = '#ffdd00';
+        ctx.fillText('VICTORY', canvasSize.width / 2, canvasSize.height / 2 - 40);
+        ctx.restore();
+      }
+
       // ===== INVULNERABILITY SHIMMER on knight =====
       if (isInvulnerableRef.current) {
         const kx = knightPosRef.current.x;
@@ -3203,6 +3658,17 @@ function EldenRingGate() {
           THE TARNISHED VS. YAIR, LORD OF ASH
         </h1>
       </div>
+
+      {/* Background Video */}
+      <video
+        ref={backgroundVideoRef}
+        className="game-bg-video"
+        src={new URL('../assets/eldenring/background.mp4', import.meta.url).href}
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
 
       {/* Game Canvas */}
       <canvas

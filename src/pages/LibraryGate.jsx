@@ -54,28 +54,27 @@ const BOOKS = [
   { id: 1, title: 'UBIK', img: 'book_image_1.png', content: UBIK_TEXTS[0], isUbik: true },
   { id: 2, title: 'Death Note', img: 'book_image_2.png', content: '"The human whose name is written in this note shall die."\n\nRULES:\nI. The human whose name is written in this note shall die.\nII. This note will not take effect unless the writer has the person\'s face in mind when writing his/her name.\nIII. If the cause of death is written within the next 40 seconds of writing the person\'s name, it will happen.\nIV. If the cause of death is not specified, the person will simply die of a heart attack.\nV. After writing the cause of death, details of the death should be written in the next 6 minutes and 40 seconds.' },
   { id: 3, title: 'KAFKA', displayTitle: 'The _____________', img: 'book_image_3.png', content: '', isKafka: true, locked: true },
-  { id: 4, title: 'Arcane Formulas Vol. I', img: 'book_image_4.png', content: 'A compendium of mystical equations and alchemical formulas. The margins are filled with frantic handwriting:\n\n"The transmutation circle requires exactly 7 points of convergence. If the angle deviates by even a single degree, the caster risks implosion. I have seen it happen. I will not forget the screaming."\n\nSeveral pages have been torn out.' },
-  { id: 5, title: 'Bestiary of Shadows', img: 'book_image_5.png', content: 'ENTRY 47: THE HOLLOW WARDEN\nClass: Ethereal Predator\nHabitat: Abandoned libraries, forgotten archives\n\n"It feeds on unread knowledge. The longer a book sits unopened, the stronger the Warden becomes. It is drawn to dust and silence. If you hear pages turning in an empty room - run."\n\nThreat Level: EXTREME' },
-  { id: 6, title: 'Whispers of the Void', img: 'book_image_6.png', content: 'You open the book and the pages are completely blank. As you stare at them, letters begin to form slowly, as if written by an invisible hand:\n\n"You should not have opened this book. Now it knows you are here. Close it. Close it now. Do not look behind you. It is already too late."\n\nThe letters dissolve back into nothing.' },
-  { id: 7, title: 'Chronicle of Lost Souls', img: 'book_image_7.png', content: 'A registry of names. Thousands upon thousands, written in different hands across centuries. Each entry contains a name, a date, and a single word:\n\nElara Voss - 1247 - "Regret"\nMarcus the Blind - 1389 - "Hunger"\nSister Gwyneth - 1502 - "Silence"\n\nThe final entry is dated today. The name column is blank, waiting to be filled.' },
+  { id: 4, title: 'ვეფხისტყაოსანი', img: 'book_image_4.png', content: 'ნახეს უცხო მოყმე ვინმე\n\ ჯდა მტირალი წლისა პირსა \n მივიდნენ და წამოარტყეს \n რა გატირებს შეჩემისა' },
+  { id: 5, title: 'A Game of Thrones', img: 'book_image_5.png', content: 'When you play the game of thrones, you win or you die.\n\nMargins filled with names.\n\nMost are crossed out.' },
+  { id: 6, title: 'The Hitchhiker\'s Guide to the Galaxy', img: 'book_image_6.png', content: 'DON\'T PANIC.\n\nThis advice is highlighted repeatedly.\n\nEverything else in the book suggests that panic would be reasonable.', isHitchhiker: true },
+  { id: 7, title: 'აი ია', img: 'book_image_7.png', content: 'აი ია.\n\nსულ ესაა.\n\nრატომ გრძელდება კითხვა?' },
   { id: 8, title: 'The Cartographer\'s Lie', img: 'book_image_8.png', content: 'Maps fill every page, but none of them match any known geography. Rivers flow upward. Mountains exist inside oceans. Cities are labeled with numbers instead of names.\n\nA note on the inside cover reads: "These are not maps of where things are. They are maps of where things WILL be. Do not trust the compass. It points to what you desire, not to north."' },
-  { id: 9, title: 'Hymns of the Buried', img: 'book_image_9.png', content: 'Sheet music for songs that should never be sung aloud. The notation uses symbols you have never seen - notes that bend, chords that seem to require more than ten fingers.\n\nA warning on the first page:\n"Humming the third movement will cause mild temporal displacement. Whistling the fifth will attract attention from Below. Singing the seventh in its entirety has not been attempted. We do not recommend it."' },
-  { id: 10, title: 'Gardener\'s Guide to Carnivorous Flora', img: 'book_image_10.png', content: 'CHAPTER 12: THE MIDNIGHT ORCHID\n\nDo not be fooled by its beauty. The Midnight Orchid does not merely consume insects - it consumes intent. Plant one near your doorstep and visitors will forget why they came. Plant two and they will forget who they are.\n\nWatering schedule: Once per lunar cycle, with the tears of someone who has lost something they cannot name.' },
-  { id: 11, title: 'Letters Never Sent', img: 'book_image_11.png', content: 'A collection of unsent letters, sealed with wax that crumbles at your touch:\n\n"My dearest,\nI write this knowing you will never read it. The library has taken me, as it takes all who linger too long among its shelves. I can feel the words crawling under my skin, replacing my memories with fiction.\n\nI no longer remember your face. But I remember the shape of your name.\n\nForever (whatever that means now),\nA."' },
-  { id: 12, title: 'Principles of Paradox', img: 'book_image_12.png', content: 'THEOREM 1: If this book exists, then it cannot exist.\nPROOF: See Theorem 2.\n\nTHEOREM 2: If this book cannot exist, then it must exist.\nPROOF: See Theorem 1.\n\nCOROLLARY: You are not reading this book. The book is reading you.\n\nAPPENDIX A: The author would like to note that they have never written this book and deny all responsibility for its contents, which do not exist.' },
+  { id: 9, title: 'The Lord of the Rings', img: 'book_image_9.png', content: 'One ring to rule them all.\n\nThe inscription fades when you stare directly at it.\n\nIt prefers to be remembered, not seen.' },
+  { id: 10, title: 'The Hobbit', img: 'book_image_10.png', content: 'In a hole in the ground lived a hobbit.\n\nThe hole gets deeper the longer you read.\n\nIt was not always this deep.' },
+  { id: 11, title: 'Harry Potter and the Sorcerer\'s Stone', img: 'book_image_11.png', content: 'The letter arrives.\n\nNot once.\nNot twice.\n\nNo matter how many you burn,\nanother appears.\n\nIt already knows where you live.' },
+  { id: 12, title: 'Harry Potter and the Chamber of Secrets', img: 'book_image_12.png', content: 'The chamber has been opened.\n\nThe message repeats.\n\nYou don’t remember writing it.' },
   { id: 13, title: 'The Alchemist\'s Journal', img: 'book_image_13.png', content: 'Day 1: Began experiments with transmutation.\nDay 15: Minor success - turned lead into a slightly shinier lead.\nDay 47: Accidentally turned my assistant into a frog. He seems happier.\nDay 91: The gold! I can almost taste it. Just need more sulfur.\nDay 120: Everything I touch turns to gold. This is not as wonderful as I imagined. I cannot eat. I cannot sleep. I cannot hold my daughter\'s hand.\nDay ???: Please. Someone. Make it stop.' },
-  { id: 14, title: 'A Study of Doors', img: 'book_image_14.png', content: 'There are doors that lead somewhere and doors that lead nowhere. Then there are doors that lead to Somewhere Else entirely.\n\nThe latter are identifiable by three characteristics:\n1. They are always slightly ajar\n2. There is a draft, but it smells of a season that hasn\'t arrived yet\n3. If you press your ear to the wood, you can hear your own voice calling from the other side\n\nIMPORTANT: Never answer yourself.' },
+  { id: 14, title: 'Mein Kampf', img: 'book_image_14.png', isMeinKampf: true, content: 'There are doors that lead somewhere and doors that lead nowhere. Then there are doors that lead to Somewhere Else entirely.\n\nThe latter are identifiable by three characteristics:\n1. They are always slightly ajar\n2. There is a draft, but it smells of a season that hasn\'t arrived yet\n3. If you press your ear to the wood, you can hear your own voice calling from the other side\n\nIMPORTANT: Never answer yourself.' },
   { id: 15, title: 'Culinary Arts of the Damned', img: 'book_image_15.png', content: 'RECIPE: MEMORY SOUP\n\nIngredients:\n- 3 cups of forgotten birthdays\n- 1 tablespoon of first love (finely minced)\n- A pinch of childhood wonder\n- The sound of rain on a window you can no longer find\n\nInstructions:\nCombine all ingredients in a cauldron of regret. Stir counterclockwise until the mixture turns the color of a sunset you once watched with someone whose name you no longer remember. Serves one. Always serves one.' },
   { id: 16, title: 'The Glass Menagerie of Stars', img: 'book_image_16.png', content: 'Catalogue of stellar anomalies observed from the observatory tower:\n\nStar #447 - "The Weeping Star": Emits light in the spectrum of sadness. Looking at it for too long causes inexplicable nostalgia for places you have never visited.\n\nStar #891 - "The Liar": Appears to be in the constellation of Truth but is actually 3,000 light years behind it, pretending.\n\nStar #1 - [REDACTED BY ORDER OF THE LIBRARIAN]' },
   { id: 17, title: 'Manual of Mundane Magic', img: 'book_image_17.png', content: 'SPELL: LOCATE LOST SOCKS\nLevel: Cantrip\nComponents: V, S (frustrated sigh)\nDuration: Until you buy new ones\n\nDescription: Upon casting, you realize the socks were in the fitted sheet the entire time. This spell has a 100% success rate but a 0% satisfaction rate.\n\nSPELL: PERFECTLY TOAST BREAD\nLevel: 9th (Legendary)\nComponents: V, S, M (bread, hope)\nDescription: Has never been successfully cast.' },
-  { id: 18, title: 'The Weight of Ink', img: 'book_image_18.png', content: 'This book grows heavier the more you read it. Not metaphorically - the physical weight of the book increases with each page turned. Scholars have theorized that the words themselves carry mass, accumulating as they are consumed by the reader\'s mind.\n\nBy page 200, most readers can no longer lift the book.\nBy page 400, it has cracked several reading desks.\nNo one has reached page 600.\n\nYou are on page 1. It already feels heavy.' },
+  { id: 18, title: 'კაცია-ადამიანი?!', img: 'book_image_18.png', content: 'კაცია?\nადამიანი?\n\nკითხვა მარტივია.\n\nპასუხი — არასოდეს.' },
   { id: 19, title: 'Field Notes: The Labyrinth', img: 'book_image_19.png', content: 'Expedition Log - Dr. Helena Cross\n\nDay 1: Entered the labyrinth at dawn. Walls are stone, approximately 4 meters high. Have been mapping turns carefully.\n\nDay 3: My map contradicts itself. Left turns I recorded yesterday now show as right turns. The labyrinth is rewriting my notes.\n\nDay 7: Found my own campsite from Day 1. I have been walking in circles. Or the labyrinth has been walking around me.\n\nDay ??: There is no exit. There was never an entrance. I have always been here.' },
-  { id: 20, title: 'Taxonomy of Silence', img: 'book_image_20.png', content: 'There are 147 documented types of silence. Among the most notable:\n\nType 12: "Library Silence" - The specific quiet found between shelves of unread books. Has a slight hum, like knowledge vibrating at a frequency just below hearing.\n\nType 89: "The Silence After" - Found in rooms where something terrible has just happened. Thick enough to taste.\n\nType 147: "The Final Silence" - [This entry is blank. The silence speaks for itself.]' },
+  { id: 20, title: 'ცისფერი მთები', img: 'book_image_20.png', content: 'წიგნი იწერება.\n\nარ იკითხება.\n\nარ სრულდება.\n\nმაგრამ მაინც არსებობს.', isBlueMountains: true },
   { id: 21, title: 'On the Nature of Keys', img: 'book_image_21.png', content: 'Every key was once a door\'s best friend. Then someone put them in pockets and drawers and junk drawers and coat hooks and that one bowl by the front door that collects keys like a graveyard collects bones.\n\nThe key to this library exists. It is not made of metal. It is not made of wood. It is made of the correct question asked at the correct time to the correct shelf.\n\nYou have not yet asked the correct question.' },
   { id: 22, title: 'The Dreamwalker\'s Handbook', img: 'book_image_22.png', content: 'CHAPTER 1: ENTERING ANOTHER\'S DREAM\n\nStep 1: Fall asleep within arm\'s reach of the dreamer.\nStep 2: Do not fall asleep. (This is the paradox. Resolve it or remain awake.)\nStep 3: When you find yourself in the dream, do not announce yourself. Dreams are territorial.\nStep 4: Leave before the dreamer wakes. If you are still inside when they open their eyes, you become a recurring dream. Forever.\n\nNOTE: The author is currently a recurring dream and cannot be reached for comment.' },
-  { id: 23, title: 'Arithmetic of the Absurd', img: 'book_image_23.png', content: 'In this system of mathematics:\n\n1 + 1 = Window (visually obvious)\n2 + 2 = Fish (turn it sideways)\n0 x Anything = Everything (nothing contains all possibilities)\nInfinity / Infinity = Tuesday (proven by exhaustion, specifically the author\'s)\n\nFinal Exam Question:\nIf a train leaves Station A at the speed of longing, and another train leaves Station B at the speed of regret, at what point do they realize they were always the same train?' },
-  { id: 24, title: 'The Last Page', img: 'book_image_24.png', content: 'You flip to the last page expecting an ending, but find only this:\n\n"Every book in this library is a door. Most doors lead to rooms. Some doors lead to corridors. One door - just one - leads out.\n\nYou have been reading the wrong books.\n\nOr perhaps... the right ones, in the wrong order.\n\nThe Librarian sees all. The Librarian knows.\nBut the Librarian will never tell.\n\nClose this book. Look up. Begin again."\n\nThe page feels warm, as if recently written.' },
-];
+  {id: 23, title: '1984', img: 'book_image_23.png', content: 'Big Brother is watching you.\n\nYou close the book.\n\nThe feeling does not stop.' },
+  { id: 24, title: 'Animal Farm', img: 'book_image_24.png', content: 'All animals are equal.\n\nYou reread the sentence.\n\nIt has changed slightly.' }];
 
 // Word puzzle configuration
 const CORRECT_ANSWER = ['now', 'you', 'feel', 'like', 'number', 'one'];
@@ -107,6 +106,11 @@ function LibraryGate() {
   const [kafkaAnswer, setKafkaAnswer] = useState('');
   const [kafkaUnlocked, setKafkaUnlocked] = useState(false);
   const [kafkaError, setKafkaError] = useState(false);
+  const [hitchhikerInput, setHitchhikerInput] = useState('');
+  const [hitchhikerSolved, setHitchhikerSolved] = useState(false);
+  const [hitchhikerError, setHitchhikerError] = useState(false);
+  const [meinKampfPhase, setMeinKampfPhase] = useState('idle'); // 'idle' | 'burning' | 'soup'
+
 
   // Word puzzle state
   const [showWordPuzzle, setShowWordPuzzle] = useState(false);
@@ -178,6 +182,18 @@ function LibraryGate() {
 
     // Regular book opening
     setOpensLeft(prev => prev - 1);
+    if (book.isHitchhiker) {
+      setHitchhikerInput('');
+      setHitchhikerSolved(false);
+      setHitchhikerError(false);
+    }
+    if (book.isMeinKampf) {
+      if (meinKampfPhase === 'idle') {
+        setMeinKampfPhase('burning');
+        setTimeout(() => setMeinKampfPhase('soup'), 2500);
+      }
+      return;
+    }
     setOpenBook(book);
   };
 
@@ -198,6 +214,16 @@ function LibraryGate() {
       });
     } else {
       setKafkaError(true);
+    }
+  };
+
+  const handleHitchhikerSubmit = (e) => {
+    e.preventDefault();
+    if (hitchhikerInput.trim() === '42') {
+      setHitchhikerSolved(true);
+      setHitchhikerError(false);
+    } else {
+      setHitchhikerError(true);
     }
   };
 
@@ -414,20 +440,97 @@ function LibraryGate() {
                   onMouseEnter={() => setHoveredBook(book.id)}
                   onMouseLeave={() => setHoveredBook(null)}
                 >
-                  <div className="book-image-wrapper">
-                    <img
-                      src={getBookImage(book.img)}
-                      alt={book.title}
-                      className="book-image"
-                      draggable={false}
-                    />
-                    {book.isKafka && !kafkaUnlocked && (
-                      <div className="book-lock-icon">🔒</div>
-                    )}
-                  </div>
-                  <div className="book-title-label">
-                    {book.isKafka && kafkaUnlocked ? 'Metamorphosis' : (book.displayTitle || book.title)}
-                  </div>
+                  {book.isMeinKampf && meinKampfPhase === 'burning' ? (
+                    <div style={{ position: 'relative', textAlign: 'center', width: '64px', margin: '0 auto' }}>
+                      <style>{`
+                        @keyframes mkChar{0%{opacity:1;filter:none;transform:scale(1)}30%{filter:brightness(.7) sepia(1) hue-rotate(-20deg)}70%{opacity:.6;filter:brightness(.2) sepia(1);transform:scale(.92) skewX(3deg)}100%{opacity:0;filter:brightness(0);transform:scale(.8) skewX(-4deg)}}
+                        @keyframes mkSmoke{0%{transform:translateY(0) translateX(0) scale(1);opacity:.45}100%{transform:translateY(-55px) translateX(var(--sx,6px)) scale(2.5);opacity:0}}
+                        @keyframes mkSpark{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--spx,8px),var(--spy,-35px)) scale(0);opacity:0}}
+                        @keyframes mkEmber{0%{transform:translateY(0) translateX(0);opacity:1}100%{transform:translateY(var(--ey,-40px)) translateX(var(--ex,10px));opacity:0}}
+                        @keyframes mkF1{0%,100%{d:path("M8,52 C4,38 2,24 10,10 C14,22 18,36 14,52Z")}33%{d:path("M8,52 C2,36 4,18 12,6 C17,20 16,38 14,52Z")}66%{d:path("M8,52 C6,40 0,26 8,8 C15,24 20,38 14,52Z")}}
+                        @keyframes mkF2{0%,100%{d:path("M26,52 C18,34 20,14 30,0 C40,14 42,34 34,52Z")}33%{d:path("M26,52 C16,30 22,10 30,2 C38,10 44,32 34,52Z")}66%{d:path("M26,52 C20,36 18,16 30,4 C40,18 40,36 34,52Z")}}
+                        @keyframes mkF3{0%,100%{d:path("M46,52 C42,38 44,24 52,10 C56,24 58,40 54,52Z")}33%{d:path("M46,52 C44,36 40,20 50,8 C57,22 60,38 54,52Z")}66%{d:path("M46,52 C40,36 46,18 54,12 C58,26 56,40 54,52Z")}}
+                        @keyframes mkGlow{0%,100%{opacity:.6;r:10}50%{opacity:.9;r:13}}
+                      `}</style>
+
+                      {/* Book charring */}
+                      <div style={{ fontSize: '48px', animation: 'mkChar 2.5s forwards', display: 'inline-block', lineHeight: 1 }}>📖</div>
+
+                      {/* Smoke puffs */}
+                      {[{x:-8,sx:'-8px'},{x:0,sx:'4px'},{x:8,sx:'10px'}].map((s,i)=>(
+                        <div key={i} style={{ position:'absolute', bottom:'70px', left:`calc(50% + ${s.x}px)`, width:'10px', height:'10px', borderRadius:'50%', background:'#888', filter:'blur(3px)', '--sx':s.sx, animation:`mkSmoke ${1.2+i*.4}s ease-out ${i*.3}s infinite`, opacity:0 }}/>
+                      ))}
+
+                      {/* Flames SVG */}
+                      <div style={{ position:'absolute', bottom:'32px', left:'50%', transform:'translateX(-50%)', pointerEvents:'none' }}>
+                        <svg width="62" height="56" viewBox="0 0 62 56" style={{ overflow:'visible' }}>
+                          <defs>
+                            <radialGradient id="glowBase" cx="50%" cy="100%" r="50%">
+                              <stop offset="0%" stopColor="#fff176" stopOpacity="0.9"/>
+                              <stop offset="100%" stopColor="#ff6a00" stopOpacity="0"/>
+                            </radialGradient>
+                          </defs>
+                          {/* Glow base */}
+                          <ellipse cx="31" cy="52" rx="22" ry="7" fill="url(#glowBase)" style={{ animation:'mkGlow .4s ease-in-out infinite' }}/>
+                          {/* Outer dark-red back flames */}
+                          <path d="M4,52 C0,36 2,20 10,6 C16,20 18,38 14,52Z" fill="#a83200" opacity=".7" style={{ animation:'mkF1 .45s ease-in-out infinite' }}/>
+                          <path d="M48,52 C44,36 46,22 54,8 C60,24 60,40 56,52Z" fill="#a83200" opacity=".7" style={{ animation:'mkF3 .5s ease-in-out infinite' }}/>
+                          {/* Mid orange flames */}
+                          <path d="M8,52 C4,38 2,24 10,10 C14,22 18,36 14,52Z" fill="#e84000" style={{ animation:'mkF1 .35s ease-in-out infinite' }}/>
+                          <path d="M46,52 C42,38 44,24 52,10 C56,24 58,40 54,52Z" fill="#e84000" style={{ animation:'mkF3 .4s ease-in-out infinite' }}/>
+                          {/* Center tall flame */}
+                          <path d="M26,52 C18,34 20,14 30,0 C40,14 42,34 34,52Z" fill="#ff6a00" style={{ animation:'mkF2 .3s ease-in-out infinite' }}/>
+                          {/* Inner yellow flames */}
+                          <path d="M16,52 C12,38 14,24 22,12 C28,26 28,40 24,52Z" fill="#ffb300" style={{ animation:'mkF1 .25s ease-in-out infinite' }}/>
+                          <path d="M38,52 C36,38 36,24 44,14 C50,28 48,42 46,52Z" fill="#ffb300" style={{ animation:'mkF3 .28s ease-in-out infinite' }}/>
+                          {/* White-hot core */}
+                          <path d="M24,52 C20,40 22,28 30,14 C38,28 40,42 36,52Z" fill="#fff176" opacity=".85" style={{ animation:'mkF2 .2s ease-in-out infinite' }}/>
+                          {/* Hot base ellipse */}
+                          <ellipse cx="31" cy="51" rx="14" ry="5" fill="white" opacity=".5"/>
+                        </svg>
+                      </div>
+
+                      {/* Sparks */}
+                      {[
+                        {l:'30%',spy:'-42px',spx:'-14px',d:.0},{l:'50%',spy:'-50px',spx:'8px',d:.15},
+                        {l:'20%',spy:'-38px',spx:'-6px',d:.3},{l:'65%',spy:'-44px',spx:'12px',d:.1},
+                        {l:'45%',spy:'-56px',spx:'-10px',d:.25},{l:'55%',spy:'-34px',spx:'16px',d:.4},
+                      ].map((sp,i)=>(
+                        <div key={i} style={{ position:'absolute', bottom:'44px', left:sp.l, width:'3px', height:'3px', borderRadius:'50%', background:'#ffdd00', boxShadow:'0 0 4px #ff8800', '--spx':sp.spx, '--spy':sp.spy, animation:`mkSpark .6s ease-out ${sp.d}s infinite` }}/>
+                      ))}
+
+                      {/* Floating embers */}
+                      {[
+                        {l:'25%',ex:'-12px',ey:'-48px',d:.0},{l:'70%',ex:'10px',ey:'-52px',d:.2},
+                        {l:'40%',ex:'-6px',ey:'-44px',d:.45},{l:'60%',ex:'14px',ey:'-40px',d:.1},
+                        {l:'35%',ex:'-16px',ey:'-56px',d:.35},
+                      ].map((em,i)=>(
+                        <div key={i} style={{ position:'absolute', bottom:'50px', left:em.l, width:'2px', height:'4px', borderRadius:'2px', background:'#ff6600', '--ex':em.ex, '--ey':em.ey, animation:`mkEmber ${1+i*.15}s ease-out ${em.d}s infinite` }}/>
+                      ))}
+                    </div>
+                  ) : book.isMeinKampf && meinKampfPhase === 'soup' ? (
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '52px' }}>🧼</div>
+                      <div className="book-title-label">Soap</div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="book-image-wrapper">
+                        <img
+                          src={getBookImage(book.img)}
+                          alt={book.title}
+                          className="book-image"
+                          draggable={false}
+                        />
+                        {book.isKafka && !kafkaUnlocked && (
+                          <div className="book-lock-icon">🔒</div>
+                        )}
+                      </div>
+                      <div className="book-title-label">
+                        {book.isKafka && kafkaUnlocked ? 'Metamorphosis' : (book.displayTitle || book.title)}
+                      </div>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
@@ -451,7 +554,157 @@ function LibraryGate() {
             </div>
             <div className="book-open-divider" />
             <div className="book-open-content">
-              {openBook.isKafka && !kafkaUnlocked ? (
+              {openBook.isBlueMountains ? (
+                // Blue Mountains - SVG illustration + text
+                <div style={{ textAlign: 'center' }}>
+                  <svg width="100%" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', marginBottom: '20px' }}>
+                    {/* Sky gradient */}
+                    <defs>
+                      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#1a2a4a"/>
+                        <stop offset="100%" stopColor="#3a6fa8"/>
+                      </linearGradient>
+                      <linearGradient id="mtn1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#2a4a7a"/>
+                        <stop offset="100%" stopColor="#1a3060"/>
+                      </linearGradient>
+                      <linearGradient id="mtn2" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#4a7aad"/>
+                        <stop offset="100%" stopColor="#2a5a90"/>
+                      </linearGradient>
+                      <linearGradient id="mtn3" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#7aade0"/>
+                        <stop offset="100%" stopColor="#4a8abf"/>
+                      </linearGradient>
+                    </defs>
+                    {/* Sky */}
+                    <rect width="400" height="200" fill="url(#skyGrad)"/>
+                    {/* Stars */}
+                    <circle cx="30" cy="20" r="1" fill="white" opacity="0.7"/>
+                    <circle cx="80" cy="12" r="1.2" fill="white" opacity="0.6"/>
+                    <circle cx="150" cy="8" r="1" fill="white" opacity="0.8"/>
+                    <circle cx="220" cy="15" r="0.8" fill="white" opacity="0.5"/>
+                    <circle cx="300" cy="10" r="1.2" fill="white" opacity="0.7"/>
+                    <circle cx="370" cy="18" r="1" fill="white" opacity="0.6"/>
+                    <circle cx="350" cy="5" r="0.8" fill="white" opacity="0.5"/>
+                    <circle cx="60" cy="35" r="0.7" fill="white" opacity="0.4"/>
+                    <circle cx="260" cy="28" r="0.9" fill="white" opacity="0.6"/>
+                    {/* Moon */}
+                    <circle cx="340" cy="35" r="14" fill="#c8d8f0" opacity="0.9"/>
+                    <circle cx="347" cy="30" r="11" fill="#3a6fa8" opacity="0.85"/>
+                    {/* Far mountains - darkest, tallest */}
+                    <polygon points="0,160 60,60 120,130 180,50 260,110 330,45 400,120 400,200 0,200" fill="url(#mtn1)" opacity="0.9"/>
+                    {/* Snow caps - far mountains */}
+                    <polygon points="60,60 50,80 70,80" fill="white" opacity="0.6"/>
+                    <polygon points="180,50 168,75 192,75" fill="white" opacity="0.6"/>
+                    <polygon points="330,45 318,72 342,72" fill="white" opacity="0.6"/>
+                    {/* Mid mountains */}
+                    <polygon points="0,180 80,95 150,145 230,85 310,135 400,90 400,200 0,200" fill="url(#mtn2)" opacity="0.95"/>
+                    {/* Snow caps - mid mountains */}
+                    <polygon points="80,95 70,115 90,115" fill="white" opacity="0.5"/>
+                    <polygon points="230,85 218,108 242,108" fill="white" opacity="0.5"/>
+                    <polygon points="400,90 388,112 400,112" fill="white" opacity="0.4"/>
+                    {/* Foreground mountains - lightest blue, atmospheric */}
+                    <polygon points="0,200 100,130 170,170 250,115 340,160 400,130 400,200" fill="url(#mtn3)" opacity="1"/>
+                    {/* Mist / fog layer */}
+                    <rect x="0" y="175" width="400" height="25" fill="#7aade0" opacity="0.25"/>
+                    <ellipse cx="200" cy="185" rx="200" ry="18" fill="#a8cce8" opacity="0.15"/>
+                  </svg>
+                  {openBook.content.split('\n').map((line, i) => (
+                    <p key={i} className={line === '' ? 'book-line-break' : 'book-line'} style={{ fontStyle: 'italic', color: '#8fb8d8' }}>{line}</p>
+                  ))}
+                </div>
+              ) : openBook.isMeinKampf ? (
+                // Mein Kampf - burn it, reveal soup
+                <div style={{ textAlign: 'center' }}>
+                  {meinKampfPhase === 'burning' && (
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                      <style>{`
+                        @keyframes flicker1 { 0%,100%{transform:scaleX(1) scaleY(1) translateY(0)} 25%{transform:scaleX(1.1) scaleY(1.15) translateY(-4px)} 50%{transform:scaleX(0.9) scaleY(1.2) translateY(-8px)} 75%{transform:scaleX(1.05) scaleY(1.1) translateY(-3px)} }
+                        @keyframes flicker2 { 0%,100%{transform:scaleX(1) scaleY(1) translateY(0)} 20%{transform:scaleX(0.85) scaleY(1.2) translateY(-6px)} 60%{transform:scaleX(1.1) scaleY(1.3) translateY(-10px)} 80%{transform:scaleX(0.95) scaleY(1.1) translateY(-2px)} }
+                        @keyframes bookChar { 0%{opacity:1;filter:none} 60%{opacity:0.9;filter:brightness(0.5) sepia(1)} 100%{opacity:0;filter:brightness(0) sepia(1)} }
+                        @keyframes ashFall { 0%{transform:translateY(0) rotate(0deg);opacity:1} 100%{transform:translateY(60px) rotate(360deg);opacity:0} }
+                      `}</style>
+                      {/* Book charring */}
+                      <div style={{ fontSize: '80px', animation: 'bookChar 3s forwards', display: 'inline-block' }}>📖</div>
+                      {/* Flame layers */}
+                      <div style={{ position: 'absolute', bottom: '60px', left: '50%', transform: 'translateX(-50%)', pointerEvents: 'none' }}>
+                        <svg width="120" height="100" viewBox="0 0 120 100" style={{ overflow: 'visible' }}>
+                          {/* Back flames */}
+                          <ellipse cx="30" cy="90" rx="18" ry="8" fill="#b03a00" opacity="0.6" style={{ animation: 'flicker2 0.4s ease-in-out infinite' }}/>
+                          <ellipse cx="90" cy="90" rx="16" ry="8" fill="#b03a00" opacity="0.6" style={{ animation: 'flicker1 0.5s ease-in-out infinite' }}/>
+                          {/* Main flames */}
+                          <path d="M20,90 Q10,55 25,30 Q35,55 30,90Z" fill="#e84000" style={{ animation: 'flicker1 0.35s ease-in-out infinite', transformOrigin: '25px 90px' }}/>
+                          <path d="M55,90 Q40,40 60,5 Q78,40 65,90Z" fill="#ff6a00" style={{ animation: 'flicker2 0.3s ease-in-out infinite', transformOrigin: '60px 90px' }}/>
+                          <path d="M90,90 Q85,55 100,28 Q110,55 100,90Z" fill="#e84000" style={{ animation: 'flicker1 0.4s ease-in-out infinite', transformOrigin: '95px 90px' }}/>
+                          {/* Inner bright flames */}
+                          <path d="M35,90 Q30,60 45,35 Q58,60 50,90Z" fill="#ffb300" style={{ animation: 'flicker2 0.25s ease-in-out infinite', transformOrigin: '45px 90px' }}/>
+                          <path d="M68,90 Q65,65 75,42 Q85,65 80,90Z" fill="#ffb300" style={{ animation: 'flicker1 0.32s ease-in-out infinite', transformOrigin: '75px 90px' }}/>
+                          {/* Core white-hot */}
+                          <ellipse cx="60" cy="85" rx="14" ry="7" fill="#fff176" opacity="0.8"/>
+                        </svg>
+                      </div>
+                      {/* Ash particles */}
+                      {[15,35,55,75,95].map((x, i) => (
+                        <div key={i} style={{ position: 'absolute', top: '10px', left: `${x}px`, width: '6px', height: '6px', borderRadius: '50%', background: '#555', animation: `ashFall ${1.2 + i * 0.3}s ease-in ${i * 0.4}s infinite` }}/>
+                      ))}
+                    </div>
+                  )}
+                  {meinKampfPhase === 'soup' && (
+                    <div style={{ animation: 'fadeIn 1s ease' }}>
+                      <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}`}</style>
+                      <div style={{ fontSize: '60px', marginBottom: '12px' }}>🍲</div>
+                      <p className="book-line" style={{ color: '#c9a95f', fontWeight: 'bold', marginBottom: '16px' }}>
+                        The ashes have been repurposed.
+                      </p>
+                      {`RECIPE: MEMORY SOUP\n\nIngredients:\n- 3 cups of forgotten birthdays\n- 1 tablespoon of first love (finely minced)\n- A pinch of childhood wonder\n- The sound of rain on a window you can no longer find\n\nInstructions:\nCombine all ingredients in a cauldron of regret. Stir counterclockwise until the mixture turns the color of a sunset you once watched with someone whose name you no longer remember. Serves one. Always serves one.`.split('\n').map((line, i) => (
+                        <p key={i} className={line === '' ? 'book-line-break' : 'book-line'}>{line}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : openBook.isHitchhiker ? (
+                // Hitchhiker's Guide - calculation puzzle
+                <div className="kafka-puzzle">
+                  {openBook.content.split('\n').map((line, i) => (
+                    <p key={i} className={line === '' ? 'book-line-break' : 'book-line'}>{line}</p>
+                  ))}
+                  <div className="book-open-divider" style={{ margin: '16px 0' }} />
+                  <p className="kafka-hint" style={{ fontFamily: 'monospace', fontSize: '13px', color: '#8B7355' }}>
+                    — DEEP THOUGHT CALCULATOR —<br />
+                    <span style={{ fontSize: '11px' }}>7,500,000 years of computation complete.</span>
+                  </p>
+                  <p className="book-line" style={{ fontStyle: 'italic', margin: '8px 0 16px' }}>
+                    "What is the Answer to Life, the Universe, and Everything?"
+                  </p>
+                  {hitchhikerSolved ? (
+                    <div style={{ textAlign: 'center', padding: '16px' }}>
+                      <div style={{ fontSize: '64px', fontWeight: 'bold', color: '#c9a95f', letterSpacing: '4px' }}>42</div>
+                      <p className="book-line" style={{ marginTop: '12px', color: '#8B7355', fontStyle: 'italic' }}>
+                        "I checked it very thoroughly, and that quite definitely is the answer."<br />
+                        — Deep Thought
+                      </p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleHitchhikerSubmit} className="kafka-form">
+                      <div className="kafka-input-wrapper">
+                        <span className="kafka-prefix">Answer =</span>
+                        <input
+                          type="number"
+                          value={hitchhikerInput}
+                          onChange={(e) => { setHitchhikerInput(e.target.value); setHitchhikerError(false); }}
+                          className={`kafka-input ${hitchhikerError ? 'error' : ''}`}
+                          placeholder="?"
+                          autoFocus
+                          style={{ width: '80px', textAlign: 'center' }}
+                        />
+                      </div>
+                      {hitchhikerError && <p className="kafka-error">That is not the answer. Think deeper.</p>}
+                      <button type="submit" className="kafka-submit">Calculate</button>
+                    </form>
+                  )}
+                </div>
+              ) : openBook.isKafka && !kafkaUnlocked ? (
                 // KAFKA locked state - show cockroach and input
                 <div className="kafka-puzzle">
                   <div className="kafka-cockroach">

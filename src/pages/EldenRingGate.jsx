@@ -234,6 +234,7 @@ function EldenRingGate() {
   const [playerHealth, setPlayerHealth] = useState(100);
   const [bossHealth, setBossHealth] = useState(BOSS_MAX_HEALTH);
   const [gameOver, setGameOver] = useState(false);
+  const [climbDied, setClimbDied] = useState(false);
   const [victory, setVictory] = useState(false);
   const [currentMusic, setCurrentMusic] = useState(new URL('../assets/audio/hava nagila.mp3', import.meta.url).href);
 
@@ -242,6 +243,7 @@ function EldenRingGate() {
   const [climbDropCount, setClimbDropCount] = useState(0);
   const [climbCurrentStep, setClimbCurrentStep] = useState(0);
   const [climbKeyTimeLeft, setClimbKeyTimeLeft] = useState(CLIMB_KEY_TIMER_MS);
+  const [lastStoneHits, setLastStoneHits] = useState(0);
   const [speakingElapsed, setSpeakingElapsed] = useState(0);
 
   // Refs for game physics
@@ -398,6 +400,7 @@ function EldenRingGate() {
   const climbFallingRef = useRef(false);
   const climbSlowPenaltyRef = useRef(false);
   const climbDropCountRef = useRef(0);
+  const lastStoneHitsRef = useRef(0);
   const whatupAudioRef = useRef(null);
   const yairAudioRef = useRef(null);
   const dahkarAudioRef = useRef(null);
@@ -708,13 +711,22 @@ function EldenRingGate() {
       e.preventDefault();
 
       const expectedKey = climbKeysRef.current[climbCurrentStep];
+      const isLastStone = climbCurrentStep === CLIMB_STONE_LAYOUT.length - 1;
+
       if (key === expectedKey) {
-        const newStep = climbCurrentStep + 1;
-        setClimbCurrentStep(newStep);
-        setClimbKeyTimeLeft(CLIMB_KEY_TIMER_MS);
+        setClimbKeyTimeLeft(CLIMB_KEY_TIMER_MS); // reset timer on each correct press
         setKnightAnimation('__WallHang.gif');
-        if (newStep >= CLIMB_STONE_LAYOUT.length) {
-          climbSuccess();
+
+        if (isLastStone) {
+          const newHits = lastStoneHitsRef.current + 1;
+          lastStoneHitsRef.current = newHits;
+          setLastStoneHits(newHits);
+          if (newHits >= 10) {
+            climbSuccess();
+          }
+        } else {
+          const newStep = climbCurrentStep + 1;
+          setClimbCurrentStep(newStep);
         }
       } else {
         handleClimbFail();
@@ -1425,7 +1437,9 @@ function EldenRingGate() {
     climbFallingRef.current = false;
     climbSlowPenaltyRef.current = false;
     climbDropCountRef.current = 0;
+    lastStoneHitsRef.current = 0;
     setClimbDropCount(0);
+    setLastStoneHits(0);
     setClimbCurrentStep(0);
     // Play whatup.mp3 ringtone
     const audio = new Audio(WHATUP_URL);
@@ -1486,18 +1500,24 @@ function EldenRingGate() {
       // 3rd drop = death
       setTimeout(() => {
         if (dahkarAudioRef.current) { dahkarAudioRef.current.pause(); dahkarAudioRef.current = null; }
-        setYairRagePhase(null);
-        yairRageActiveRef.current = false;
-        playerHealthRef.current = 0;
-        setPlayerHealth(0);
-        gameOverRef.current = true;
-        setGameOver(true);
+        setYairRagePhase('climbDeath');
+        setTimeout(() => {
+          setYairRagePhase(null);
+          yairRageActiveRef.current = false;
+          playerHealthRef.current = 0;
+          setPlayerHealth(0);
+          gameOverRef.current = true;
+          setClimbDied(true);
+          setGameOver(true);
+        }, 2500);
       }, 1500);
     } else {
       // Re-randomize and restart sequence after fall animation
       setTimeout(() => {
         const shuffled = [...CLIMB_KEY_POOL].sort(() => Math.random() - 0.5);
         climbKeysRef.current = shuffled.slice(0, CLIMB_STONE_LAYOUT.length);
+        lastStoneHitsRef.current = 0;
+        setLastStoneHits(0);
         setClimbCurrentStep(0);
         climbFallingRef.current = false;
         setKnightAnimation('__WallHang.gif');
@@ -3984,7 +4004,11 @@ function EldenRingGate() {
         <div className="game-over-overlay">
           <div className="game-over-content">
             <h1 className="game-over-title">GAME OVER</h1>
-            <p className="game-over-subtitle">The Tarnished has fallen...</p>
+            <p className="game-over-subtitle">
+              {climbDied
+                ? 'You fell to your death climbing the airflow wall...'
+                : 'The Tarnished has fallen...'}
+            </p>
             <button
               className="restart-btn"
               onClick={() => window.location.reload()}
@@ -4220,9 +4244,16 @@ function EldenRingGate() {
                   <span style={{ fontSize: isCompleted ? '1.6rem' : '1.8rem', lineHeight: 1 }}>
                     {isCompleted ? '✅' : '🔘'}
                   </span>
-                  {!isCompleted && (
-                    <span style={{ fontSize: '0.6rem', color: '#fff', fontFamily: 'monospace', fontWeight: 'bold' }}>
+                  {!isCompleted && isCurrent && (
+                    <span style={{ fontSize: '0.58rem', color: '#fff', fontFamily: 'monospace', fontWeight: 'bold', textAlign: 'center', lineHeight: 1.2 }}>
                       {(climbKeysRef.current[i] || '').toUpperCase()}
+                      <br />
+                      <span style={{ fontSize: '0.7rem', color: '#ffff55' }}>{lastStoneHits}/10</span>
+                    </span>
+                  )}
+                  {!isCompleted && !isCurrent && (
+                    <span style={{ fontSize: '0.6rem', color: '#aaffcc', fontFamily: 'monospace', fontWeight: 'bold' }}>
+                      {(climbKeysRef.current[i] || '').toUpperCase()} ×10
                     </span>
                   )}
                 </div>
@@ -4282,7 +4313,7 @@ function EldenRingGate() {
                 style={{
                   position: 'absolute',
                   left: sx - KNIGHT_WIDTH / 2,
-                  top: sy - KNIGHT_HEIGHT + 80,
+                  top: sy - KNIGHT_HEIGHT - 20,
                   width: KNIGHT_WIDTH,
                   height: KNIGHT_HEIGHT,
                   imageRendering: 'pixelated',
@@ -4339,9 +4370,47 @@ function EldenRingGate() {
               textShadow: '0 0 30px rgba(68,255,136,0.9), 0 0 60px rgba(68,255,136,0.5)',
               animation: 'pulse 0.5s ease-in-out infinite',
             }}>
-              GENERATOR ONLINE!<br />
-              <span style={{ fontSize: '1.2rem', color: '#ffee55' }}>
-                Resuming battle...
+              You successfully climbed<br />to the Airflow Generator!<br />
+              <span style={{ fontSize: '1.1rem', color: '#ffee55', display: 'block', marginTop: 12 }}>
+                The Sigma Boss cannot hide from you now...<br />
+                <span style={{ fontSize: '0.95rem', opacity: 0.8 }}>Resuming battle!</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== CLIMB DEATH SCREEN ===== */}
+      {yairRagePhase === 'climbDeath' && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 3000, overflow: 'hidden',
+          background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
+        }}>
+          <img
+            src={AIRFLOW_PAUZED_URL}
+            alt="Airflow Paused"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }}
+          />
+          <div style={{ position: 'relative', zIndex: 10, textAlign: 'center' }}>
+            <div style={{
+              fontSize: '4rem', marginBottom: 24,
+              filter: 'drop-shadow(0 0 20px #ff2200)',
+            }}>💀</div>
+            <div style={{
+              color: '#ff3322', fontFamily: 'monospace', fontWeight: 'bold',
+              fontSize: '2.2rem', textShadow: '0 0 30px rgba(255,50,0,0.9)',
+              marginBottom: 16,
+            }}>
+              YOU DIED FROM CLIMBING
+            </div>
+            <div style={{
+              color: 'rgba(255,200,150,0.85)', fontFamily: 'monospace',
+              fontSize: '1.05rem', lineHeight: 1.7,
+            }}>
+              Your grip failed and you plummeted<br />
+              from the airflow generator wall...<br />
+              <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem' }}>
+                The generator remains paused.
               </span>
             </div>
           </div>

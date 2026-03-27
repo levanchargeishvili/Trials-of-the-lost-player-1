@@ -98,7 +98,7 @@ function LandingPage() {
           <p>You stand at the threshold of a nightmare.<br />
           A journey from which few return whole.</p>
 
-          <p><span className="yair-text">Sigma Boss</span> has forged <span className="highlight">Four Gates</span><br />
+          <p><span className="yair-text">Ilarion Taitashvili</span> has forged <span className="highlight">Four Gates</span><br />
           to test your foolish ambitions.<br />
           Each darker and more twisted than the last.</p>
 

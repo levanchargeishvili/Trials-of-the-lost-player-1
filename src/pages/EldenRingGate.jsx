@@ -714,7 +714,7 @@ function EldenRingGate() {
       const isLastStone = climbCurrentStep === CLIMB_STONE_LAYOUT.length - 1;
 
       if (key === expectedKey) {
-        setClimbKeyTimeLeft(CLIMB_KEY_TIMER_MS); // reset timer on each correct press
+        if (!isLastStone) setClimbKeyTimeLeft(CLIMB_KEY_TIMER_MS); // only reset timer when advancing stones, not on mash
         setKnightAnimation('__WallHang.gif');
 
         if (isLastStone) {
@@ -4040,47 +4040,112 @@ function EldenRingGate() {
       {yairRagePhase === 'ringing' && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 3000,
-          background: 'linear-gradient(160deg, #075E54 0%, #128C7E 40%, #1a1a2e 100%)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          gap: '28px', fontFamily: 'sans-serif',
+          background: 'radial-gradient(ellipse at 50% 40%, #0d2b28 0%, #040d0c 100%)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: 'sans-serif',
         }}>
-          <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: '1rem', letterSpacing: 2 }}>
-            WHATSAPP — INCOMING CALL
-          </div>
+          {/* Phone shell */}
           <div style={{
-            width: 110, height: 110, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #ff6b35, #c0392b)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '3.5rem',
-            border: '4px solid rgba(255,255,255,0.25)',
-            boxShadow: '0 0 40px rgba(192,57,43,0.6), 0 0 80px rgba(192,57,43,0.3)',
-            animation: 'pulse 1s ease-in-out infinite',
+            position: 'relative',
+            width: 340, height: 700,
+            background: '#111',
+            borderRadius: 48,
+            border: '8px solid #252525',
+            boxShadow: '0 0 0 1px #3a3a3a, 0 50px 120px rgba(0,0,0,0.95), 0 0 80px rgba(37,211,102,0.12)',
+            overflow: 'hidden',
+            display: 'flex', flexDirection: 'column',
           }}>
-            😈
-          </div>
-          <div style={{ color: '#fff', fontSize: '2.2rem', fontWeight: 'bold', textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}>
-            Sigma Boss
-          </div>
-          <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.95rem' }}>
-            WhatsApp Audio Call
-          </div>
-          <div style={{ display: 'flex', gap: '60px', alignItems: 'center', marginTop: 20 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-              <button
-                onClick={handleAnswerCall}
-                style={{
-                  width: 72, height: 72, borderRadius: '50%',
-                  background: '#25D366', border: 'none', fontSize: '2.2rem',
-                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 0 25px rgba(37,211,102,0.8), 0 0 50px rgba(37,211,102,0.4)',
-                  transition: 'transform 0.1s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-              >
-                📞
-              </button>
-              <span style={{ color: '#fff', fontSize: '0.85rem' }}>Answer</span>
+            {/* Side buttons */}
+            <div style={{ position: 'absolute', left: -13, top: 110, width: 5, height: 28, background: '#1e1e1e', borderRadius: '3px 0 0 3px', boxShadow: 'inset 1px 0 0 #444' }} />
+            <div style={{ position: 'absolute', left: -13, top: 150, width: 5, height: 28, background: '#1e1e1e', borderRadius: '3px 0 0 3px', boxShadow: 'inset 1px 0 0 #444' }} />
+            <div style={{ position: 'absolute', right: -13, top: 130, width: 5, height: 44, background: '#1e1e1e', borderRadius: '0 3px 3px 0', boxShadow: 'inset -1px 0 0 #444' }} />
+
+            {/* Dynamic island */}
+            <div style={{ position: 'absolute', top: 13, left: '50%', transform: 'translateX(-50%)', width: 115, height: 32, background: '#000', borderRadius: 20, zIndex: 20, boxShadow: '0 0 0 1px #1a1a1a' }} />
+
+            {/* Status bar */}
+            <div style={{
+              height: 54, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+              padding: '0 24px 10px', color: '#fff', fontSize: '0.72rem', fontWeight: 700,
+              background: '#075E54', position: 'relative', zIndex: 5, flexShrink: 0,
+            }}>
+              <span>9:41</span>
+              <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+                {[3, 5, 7, 9].map((h, i) => (
+                  <div key={i} style={{ width: 3, height: h, background: i < 3 ? '#fff' : 'rgba(255,255,255,0.3)', borderRadius: 1 }} />
+                ))}
+                <span style={{ fontSize: '0.7rem', marginLeft: 2 }}>WiFi</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 1, marginLeft: 2 }}>
+                  <div style={{ width: 22, height: 11, border: '1.5px solid #fff', borderRadius: 3, padding: '1px 1px' }}>
+                    <div style={{ width: '70%', height: '100%', background: '#4cff88', borderRadius: 1 }} />
+                  </div>
+                  <div style={{ width: 2, height: 5, background: 'rgba(255,255,255,0.4)', borderRadius: 1 }} />
+                </div>
+              </div>
+            </div>
+
+            {/* WhatsApp call screen */}
+            <div style={{
+              flex: 1,
+              background: 'linear-gradient(180deg, #075E54 0%, #054d44 35%, #031f1b 70%, #020c0b 100%)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between',
+              padding: '28px 24px 36px',
+            }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem', letterSpacing: 2, marginBottom: 4 }}>WhatsApp</div>
+                <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.7rem' }}>Incoming audio call</div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
+                {/* Pulsing rings + avatar */}
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ position: 'absolute', width: 150, height: 150, borderRadius: '50%', border: '2px solid rgba(37,211,102,0.25)', animation: 'pulse 1.6s ease-in-out infinite' }} />
+                  <div style={{ position: 'absolute', width: 175, height: 175, borderRadius: '50%', border: '2px solid rgba(37,211,102,0.12)', animation: 'pulse 1.6s ease-in-out infinite 0.4s' }} />
+                  <div style={{
+                    width: 110, height: 110, borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #ff6b35, #c0392b)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '3.5rem',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+                  }}>😈</div>
+                </div>
+                <div style={{ color: '#fff', fontSize: '1.85rem', fontWeight: 700, textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>Ilarion Taitashvili</div>
+                <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.82rem' }}>WhatsApp Audio Call</div>
+              </div>
+
+              {/* Accept / Decline */}
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 72, width: '100%' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                  <div style={{
+                    width: 62, height: 62, borderRadius: '50%', background: '#FF3B30',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '1.7rem', opacity: 0.45, cursor: 'not-allowed',
+                    boxShadow: '0 4px 18px rgba(255,59,48,0.35)',
+                  }}>📵</div>
+                  <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem' }}>Decline</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                  <button
+                    onClick={handleAnswerCall}
+                    style={{
+                      width: 62, height: 62, borderRadius: '50%',
+                      background: '#25D366', border: 'none', fontSize: '1.7rem',
+                      cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: '0 0 22px rgba(37,211,102,0.8), 0 4px 18px rgba(0,0,0,0.4)',
+                      animation: 'pulse 1s ease-in-out infinite',
+                      transition: 'transform 0.1s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.12)'}
+                    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                  >📞</button>
+                  <span style={{ color: '#fff', fontSize: '0.78rem' }}>Answer</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Home bar */}
+            <div style={{ height: 26, background: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: 100, height: 4, background: 'rgba(255,255,255,0.22)', borderRadius: 2 }} />
             </div>
           </div>
         </div>
@@ -4090,66 +4155,128 @@ function EldenRingGate() {
       {yairRagePhase === 'speaking' && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 3000,
-          background: 'linear-gradient(160deg, #075E54 0%, #0a1a18 60%, #020d0c 100%)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          gap: '22px', fontFamily: 'sans-serif',
+          background: 'radial-gradient(ellipse at 50% 40%, #0d2b28 0%, #040d0c 100%)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: 'sans-serif',
         }}>
-          {/* Status bar */}
-          <div style={{ color: '#25D366', fontSize: '1rem', letterSpacing: 2, fontWeight: 600 }}>
-            WhatsApp
-          </div>
-
-          {/* Avatar */}
-          <div style={{
-            width: 110, height: 110, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #ff6b35, #c0392b)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '3.5rem',
-            border: '3px solid rgba(255,255,255,0.15)',
-            boxShadow: '0 0 0 8px rgba(37,211,102,0.08), 0 0 40px rgba(37,211,102,0.2)',
-          }}>
-            😈
-          </div>
-
-          {/* Caller name */}
-          <div style={{ color: '#fff', fontSize: '2rem', fontWeight: 'bold', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-            Sigma Boss
-          </div>
-
-          {/* Call timer */}
-          <div style={{
-            color: '#25D366', fontSize: '1.4rem', fontWeight: 'bold',
-            fontFamily: 'monospace', letterSpacing: 3,
-            textShadow: '0 0 10px rgba(37,211,102,0.6)',
-          }}>
-            {String(Math.floor(speakingElapsed / 60)).padStart(2, '0')}:{String(speakingElapsed % 60).padStart(2, '0')}
-          </div>
-
-          {/* Speaking waveform animation */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5, height: 40 }}>
-            {[0.4, 0.7, 1.0, 0.8, 0.5, 0.9, 0.6, 1.0, 0.7, 0.4].map((h, i) => (
-              <div key={i} style={{
-                width: 4, borderRadius: 2,
-                background: '#25D366',
-                height: `${h * 36}px`,
-                animation: `speakWave 0.${6 + i % 4}s ease-in-out infinite alternate`,
-                animationDelay: `${i * 0.08}s`,
-                opacity: 0.8,
-              }} />
-            ))}
-          </div>
-
-          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>
-            Yair is speaking...
-          </div>
-
-          {/* Inline keyframe for the wave bars */}
           <style>{`
             @keyframes speakWave {
               from { transform: scaleY(0.3); opacity: 0.5; }
               to   { transform: scaleY(1.0); opacity: 1.0; }
             }
           `}</style>
+
+          {/* Phone shell */}
+          <div style={{
+            position: 'relative',
+            width: 340, height: 700,
+            background: '#111',
+            borderRadius: 48,
+            border: '8px solid #252525',
+            boxShadow: '0 0 0 1px #3a3a3a, 0 50px 120px rgba(0,0,0,0.95), 0 0 80px rgba(37,211,102,0.15)',
+            overflow: 'hidden',
+            display: 'flex', flexDirection: 'column',
+          }}>
+            {/* Side buttons */}
+            <div style={{ position: 'absolute', left: -13, top: 110, width: 5, height: 28, background: '#1e1e1e', borderRadius: '3px 0 0 3px' }} />
+            <div style={{ position: 'absolute', left: -13, top: 150, width: 5, height: 28, background: '#1e1e1e', borderRadius: '3px 0 0 3px' }} />
+            <div style={{ position: 'absolute', right: -13, top: 130, width: 5, height: 44, background: '#1e1e1e', borderRadius: '0 3px 3px 0' }} />
+
+            {/* Dynamic island */}
+            <div style={{ position: 'absolute', top: 13, left: '50%', transform: 'translateX(-50%)', width: 115, height: 32, background: '#000', borderRadius: 20, zIndex: 20 }} />
+
+            {/* Status bar */}
+            <div style={{
+              height: 54, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+              padding: '0 24px 10px', color: '#fff', fontSize: '0.72rem', fontWeight: 700,
+              background: '#054d44', position: 'relative', zIndex: 5, flexShrink: 0,
+            }}>
+              <span style={{ color: '#25D366' }}>9:41</span>
+              <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+                {[3, 5, 7, 9].map((h, i) => (
+                  <div key={i} style={{ width: 3, height: h, background: i < 3 ? '#fff' : 'rgba(255,255,255,0.3)', borderRadius: 1 }} />
+                ))}
+                <span style={{ fontSize: '0.7rem', marginLeft: 2 }}>WiFi</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 1, marginLeft: 2 }}>
+                  <div style={{ width: 22, height: 11, border: '1.5px solid #fff', borderRadius: 3, padding: '1px 1px' }}>
+                    <div style={{ width: '70%', height: '100%', background: '#4cff88', borderRadius: 1 }} />
+                  </div>
+                  <div style={{ width: 2, height: 5, background: 'rgba(255,255,255,0.4)', borderRadius: 1 }} />
+                </div>
+              </div>
+            </div>
+
+            {/* Call screen content */}
+            <div style={{
+              flex: 1,
+              background: 'linear-gradient(180deg, #054d44 0%, #031f1b 45%, #020c0b 100%)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between',
+              padding: '28px 24px 40px',
+            }}>
+              {/* Top info */}
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.75rem', letterSpacing: 2, marginBottom: 4 }}>WhatsApp</div>
+                <div style={{ color: '#25D366', fontSize: '0.78rem', fontWeight: 600 }}>Active call</div>
+              </div>
+
+              {/* Avatar + name + timer */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+                <div style={{
+                  width: 110, height: 110, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #ff6b35, #c0392b)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '3.5rem',
+                  boxShadow: '0 0 0 6px rgba(37,211,102,0.12), 0 0 40px rgba(37,211,102,0.2), 0 8px 32px rgba(0,0,0,0.6)',
+                }}>😈</div>
+
+                <div style={{ color: '#fff', fontSize: '1.8rem', fontWeight: 700 }}>Ilarion Taitashvili</div>
+
+                {/* Timer */}
+                <div style={{
+                  color: '#25D366', fontSize: '1.3rem', fontWeight: 700,
+                  fontFamily: 'monospace', letterSpacing: 4,
+                  textShadow: '0 0 12px rgba(37,211,102,0.7)',
+                }}>
+                  {String(Math.floor(speakingElapsed / 60)).padStart(2, '0')}:{String(speakingElapsed % 60).padStart(2, '0')}
+                </div>
+
+                {/* Waveform */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, height: 44 }}>
+                  {[0.4, 0.7, 1.0, 0.8, 0.5, 0.9, 0.6, 1.0, 0.7, 0.4].map((h, i) => (
+                    <div key={i} style={{
+                      width: 4, borderRadius: 2,
+                      background: '#25D366',
+                      height: `${h * 38}px`,
+                      animation: `speakWave 0.${6 + i % 4}s ease-in-out infinite alternate`,
+                      animationDelay: `${i * 0.08}s`,
+                      opacity: 0.85,
+                    }} />
+                  ))}
+                </div>
+                <div style={{ color: '#25D366', fontSize: '0.82rem', fontWeight: 700, letterSpacing: 2 }}>ILARION IS TALKING</div>
+              </div>
+
+              {/* Muted call controls (cosmetic) */}
+              <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+                {[['🔇', 'Mute'], ['⌨️', 'Keypad'], ['🔊', 'Speaker']].map(([icon, label]) => (
+                  <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                    <div style={{
+                      width: 54, height: 54, borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.1)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '1.4rem', cursor: 'default', opacity: 0.6,
+                    }}>{icon}</div>
+                    <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem' }}>{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Home bar */}
+            <div style={{ height: 26, background: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: 100, height: 4, background: 'rgba(255,255,255,0.22)', borderRadius: 2 }} />
+            </div>
+          </div>
         </div>
       )}
 
@@ -4167,25 +4294,61 @@ function EldenRingGate() {
 
           {/* Header bar */}
           <div style={{
-            position: 'absolute', top: 0, left: 0, right: 0, padding: '10px 20px',
-            background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            borderBottom: '2px solid rgba(255,120,0,0.4)',
+            position: 'absolute', top: 0, left: 0, right: 0,
+            padding: '10px 24px',
+            background: 'linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(10,20,18,0.92) 100%)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            borderBottom: '1px solid rgba(255,140,0,0.25)',
+            boxShadow: '0 2px 24px rgba(0,0,0,0.5)',
           }}>
-            <div style={{ color: '#ff8800', fontFamily: 'monospace', fontWeight: 'bold', fontSize: '1.1rem' }}>
-              ⚡ TRIGGER: Continue_Phase_4_Fighting — CLIMB TO THE ▶ BUTTON
+            {/* Left: task label */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 8, height: 8, borderRadius: '50%',
+                background: '#ff8800',
+                boxShadow: '0 0 8px rgba(255,136,0,0.9)',
+                animation: 'pulse 1s ease-in-out infinite',
+              }} />
+              <div style={{ fontFamily: 'monospace', fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', letterSpacing: 1 }}>
+                TRIGGER
+              </div>
+              <div style={{ fontFamily: 'monospace', fontSize: '0.95rem', color: '#ffaa33', fontWeight: 700, letterSpacing: 0.5 }}>
+                Continue_Phase_4_Fighting
+              </div>
+              <div style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: 'rgba(255,255,255,0.35)', marginLeft: 4 }}>
+                — climb to the ▶ button
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+
+            {/* Right: status chips */}
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
               {climbDropCount >= 1 && (
-                <span style={{ color: '#ff4444', fontFamily: 'monospace', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                  {climbDropCount === 1 ? '✋ RIGHT HAND BROKEN' : '✋ RIGHT HAND  🦵 LEFT LEG BROKEN'}
-                </span>
+                <div style={{
+                  background: 'rgba(255,50,50,0.15)',
+                  border: '1px solid rgba(255,80,80,0.4)',
+                  borderRadius: 6, padding: '3px 10px',
+                  color: '#ff6666', fontFamily: 'monospace', fontWeight: 700, fontSize: '0.78rem',
+                }}>
+                  {climbDropCount === 1 ? '✋ Right hand broken' : '✋ Right hand  🦵 Left leg broken'}
+                </div>
               )}
-              <span style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'monospace', fontSize: '0.9rem' }}>
-                ❤️ {3 - climbDropCount} attempt{3 - climbDropCount !== 1 ? 's' : ''} left
-              </span>
-              <span style={{ color: '#aaa', fontFamily: 'monospace', fontSize: '0.85rem' }}>
-                {climbCurrentStep} / {CLIMB_STONE_LAYOUT.length} keys
-              </span>
+              <div style={{
+                background: 'rgba(255,255,255,0.07)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: 6, padding: '3px 12px',
+                color: 'rgba(255,255,255,0.75)', fontFamily: 'monospace', fontSize: '0.82rem',
+              }}>
+                ❤️ {3 - climbDropCount} {(3 - climbDropCount) === 1 ? 'attempt' : 'attempts'} left
+              </div>
+              <div style={{
+                background: 'rgba(255,140,0,0.1)',
+                border: '1px solid rgba(255,140,0,0.25)',
+                borderRadius: 6, padding: '3px 12px',
+                color: '#ffaa55', fontFamily: 'monospace', fontSize: '0.82rem', fontWeight: 600,
+              }}>
+                {climbCurrentStep} / {CLIMB_STONE_LAYOUT.length}
+              </div>
             </div>
           </div>
 

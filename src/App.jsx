@@ -19,12 +19,9 @@ function App() {
     return sessionStorage.getItem('assetsLoaded') === 'true';
   });
 
-  if (!authed) {
-    return <Login onLogin={() => setAuthed(true)} />;
-  }
-
-  // Enable audio autoplay on first load
+  // Enable audio autoplay on first load (must be before any early return — Rules of Hooks)
   useEffect(() => {
+    if (!authed) return;
     const enableAudio = async () => {
       try {
         const silentAudio = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4Qw');
@@ -34,7 +31,11 @@ function App() {
       }
     };
     enableAudio();
-  }, []);
+  }, [authed]);
+
+  if (!authed) {
+    return <Login onLogin={() => setAuthed(true)} />;
+  }
 
   // Show Preloader to load assets
   if (!assetsLoaded) {

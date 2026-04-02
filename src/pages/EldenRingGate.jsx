@@ -2094,7 +2094,7 @@ function EldenRingGate() {
             x: canvasSize.width / 2,
             y: canvasSize.height / 2 - 60,
             time: now,
-            color: '#ffdd00',
+            color: '#ff2222',
             big: true,
           });
           console.log('🤖 Drone destroyed! Boss stunned!');
@@ -2170,7 +2170,7 @@ function EldenRingGate() {
             x: canvasSize.width / 2,
             y: canvasSize.height / 2 - 60,
             time: now,
-            color: '#ffdd00',
+            color: '#ff2222',
             big: true,
           });
           console.log('🐀 Rat defeated! Boss vulnerable!');
@@ -4797,37 +4797,6 @@ function EldenRingGate() {
         </div>
       )}
 
-      {/* ===== PHASE SWITCHER (dev testing) ===== */}
-      {!gameOver && !victory && !ilarionRagePhase && (
-        <div style={{
-          position: 'fixed', bottom: 20, right: 20, zIndex: 200,
-          display: 'flex', gap: 8, flexDirection: 'column', alignItems: 'flex-end',
-        }}>
-          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', fontFamily: 'monospace', marginBottom: 2 }}>
-            DEV: PHASE
-          </div>
-          <div style={{ display: 'flex', gap: 6 }}>
-            {[1, 2, 3, 4].map(p => (
-              <button
-                key={p}
-                onClick={() => handlePhaseSwitch(p)}
-                style={{
-                  width: 36, height: 36,
-                  background: currentPhaseRef.current === p
-                    ? 'linear-gradient(135deg, #ff8800, #cc5500)'
-                    : 'linear-gradient(135deg, #2a2c2f, #1a1c1f)',
-                  border: `2px solid ${currentPhaseRef.current === p ? '#ffaa44' : '#555'}`,
-                  borderRadius: 4, color: '#fff', fontWeight: 'bold',
-                  fontSize: '0.9rem', cursor: 'pointer', fontFamily: 'monospace',
-                  transition: 'all 0.15s',
-                }}
-              >
-                {p}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

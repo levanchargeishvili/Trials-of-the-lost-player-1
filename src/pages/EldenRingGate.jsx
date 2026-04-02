@@ -1615,46 +1615,6 @@ function EldenRingGate() {
     }, 2500);
   }
 
-  function handlePhaseSwitch(phase) {
-    const phaseStartHP = { 1: 900, 2: 680, 3: 470, 4: 220 };
-    const newHP = phaseStartHP[phase];
-    bossHealthRef.current = newHP;
-    setBossHealth(newHP);
-    currentPhaseRef.current = phase;
-    phaseStartTimeRef.current = Date.now();
-    executedActionsRef.current = new Set();
-    bossStateRef.current = BOSS_FLYING;
-    bossStateTimerRef.current = Date.now();
-    // Clear all entities
-    rocketsRef.current = [];
-    lasersRef.current = [];
-    bossClonesRef.current = [];
-    droneRef.current = null;
-    ratRef.current = null;
-    rocketStormActiveRef.current = false;
-    giantCoinRef.current = null;
-    // Cancel ilarion rage if active
-    if (ilarionRageActiveRef.current) {
-      ilarionRageActiveRef.current = false;
-      if (whatupAudioRef.current) { whatupAudioRef.current.pause(); whatupAudioRef.current = null; }
-      if (ilarionAudioRef.current) { ilarionAudioRef.current.pause(); ilarionAudioRef.current = null; }
-      if (dahkarAudioRef.current) { dahkarAudioRef.current.pause(); dahkarAudioRef.current = null; }
-      if (speakingIntervalRef.current) { clearInterval(speakingIntervalRef.current); speakingIntervalRef.current = null; }
-      setIlarionRagePhase(null);
-    }
-    // Init phase
-    if (phase === 2) {
-      spawnDrone();
-      setCurrentMusic(new URL('../assets/audio/HAVA NAGILA (HARDTEKK).mp3', import.meta.url).href);
-    } else if (phase === 3) {
-      spawnRat();
-    } else if (phase === 4) {
-      cloneShift();
-      rocketStormStart();
-    }
-    console.log(`⚡ PHASE SWITCH TO ${phase}`);
-  }
-
   // Main Physics & Game Loop
   useEffect(() => {
     if (gameOver || victory) return;

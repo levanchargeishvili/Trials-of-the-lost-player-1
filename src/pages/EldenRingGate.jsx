@@ -8,7 +8,7 @@ const getKnightAnimation = (filename) => new URL(`../assets/eldenring/knight/Col
 const AIRFLOW_PAUZED_URL = new URL('../assets/eldenring/pauzed-airflow.png', import.meta.url).href;
 const AIRFLOW_UNPAUZED_URL = new URL('../assets/eldenring/unpauzed-airflow.png', import.meta.url).href;
 const WHATUP_URL = new URL('../assets/audio/whatup.mp3', import.meta.url).href;
-const ILARION_URL = new URL('../assets/audio/yair.mp3', import.meta.url).href;
+const ILARION_URL = new URL('../assets/audio/ilarion.mp3', import.meta.url).href;
 const DAHKAR_URL = new URL('../assets/audio/dahkar.mp3', import.meta.url).href;
 // Climbing key pool (15 distinct keys)
 const CLIMB_KEY_POOL = ['a', 'b', 'c', 'd', 'f', 'g', 'r', 'e', 's', 'q', 'w', 'z', 'x', 'v', 't'];
@@ -4298,7 +4298,7 @@ function EldenRingGate() {
         </div>
       )}
 
-      {/* ===== ILARION RAGE - SPEAKING SCREEN (yair.mp3 playing) ===== */}
+      {/* ===== ILARION RAGE - SPEAKING SCREEN (ilarion.mp3 playing) ===== */}
       {ilarionRagePhase === 'speaking' && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 3000,

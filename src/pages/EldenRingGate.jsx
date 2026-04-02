@@ -1813,6 +1813,14 @@ function EldenRingGate() {
                           bossClonesRef.current = [];
                           rocketStormActiveRef.current = false;
                           triggerScreenShake(8, 500);
+                          styleTextRef.current.push({
+                            text: 'KNOCKED OUT!',
+                            x: canvasSize.width / 2,
+                            y: canvasSize.height / 2 - 60,
+                            time: Date.now(),
+                            color: '#ffdd00',
+                            big: true,
+                          });
                           console.log('💥 BOSS KNOCKED!');
                         }
                       }, 500);
@@ -2081,6 +2089,14 @@ function EldenRingGate() {
           knockedFrameRef.current = 0;
           // Stay in phase 2 — RECOVERING handler will check HP and decide
           triggerScreenShake(8, 500);
+          styleTextRef.current.push({
+            text: 'KNOCKED OUT!',
+            x: canvasSize.width / 2,
+            y: canvasSize.height / 2 - 60,
+            time: now,
+            color: '#ffdd00',
+            big: true,
+          });
           console.log('🤖 Drone destroyed! Boss stunned!');
         }
       }
@@ -2149,6 +2165,14 @@ function EldenRingGate() {
           bossStateTimerRef.current = now;
           knockedFrameRef.current = 0;
           triggerScreenShake(10, 700);
+          styleTextRef.current.push({
+            text: 'KNOCKED OUT!',
+            x: canvasSize.width / 2,
+            y: canvasSize.height / 2 - 60,
+            time: now,
+            color: '#ffdd00',
+            big: true,
+          });
           console.log('🐀 Rat defeated! Boss vulnerable!');
         }
       }
@@ -3803,16 +3827,21 @@ function EldenRingGate() {
       // ===== STYLE TEXT POPUPS =====
       styleTextRef.current.forEach(st => {
         const age = now - st.time;
-        const alpha = Math.max(0, 1 - age / 1500);
+        const duration = st.big ? 2500 : 1500;
+        const alpha = Math.max(0, 1 - age / duration);
         const yOff = age * 0.05;
         ctx.save();
         ctx.globalAlpha = alpha;
-        ctx.font = 'bold 18px monospace';
+        ctx.font = st.big ? 'bold 52px monospace' : 'bold 18px monospace';
         ctx.textAlign = 'center';
         ctx.strokeStyle = '#000';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = st.big ? 6 : 3;
         ctx.strokeText(st.text, st.x, st.y - yOff);
         ctx.fillStyle = st.color || '#ffff00';
+        if (st.big) {
+          ctx.shadowColor = st.color || '#ffdd00';
+          ctx.shadowBlur = 24;
+        }
         ctx.fillText(st.text, st.x, st.y - yOff);
         ctx.restore();
       });

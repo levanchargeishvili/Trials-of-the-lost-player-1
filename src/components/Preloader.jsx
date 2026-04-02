@@ -37,6 +37,7 @@ const ASSETS_TO_PRELOAD = {
     new URL('../assets/eldenring/knight/Colour1/NoOutline/120x80_gifs/__Dash.gif', import.meta.url).href,
     new URL('../assets/eldenring/knight/Colour1/NoOutline/120x80_gifs/__Attack.gif', import.meta.url).href,
     new URL('../assets/eldenring/knight/Colour1/NoOutline/120x80_gifs/__Attack2.gif', import.meta.url).href,
+    new URL('../assets/eldenring/knight/Colour1/NoOutline/120x80_gifs/__AttackComboNoMovement.gif', import.meta.url).href,
     new URL('../assets/eldenring/knight/Colour1/NoOutline/120x80_gifs/__Death.gif', import.meta.url).href,
     new URL('../assets/eldenring/knight/Colour1/NoOutline/120x80_gifs/__DeathNoMovement.gif', import.meta.url).href,
     new URL('../assets/eldenring/knight/Colour1/NoOutline/120x80_gifs/__WallHang.gif', import.meta.url).href,

@@ -336,9 +336,10 @@ function EldenRingGate() {
   const isParryingRef = useRef(false);
   const parryWindowEndRef = useRef(0);
   const parryCooldownEndRef = useRef(0);
+  const parryAnimEndRef = useRef(0); // blocks animation override for full GIF duration
   const parryCountRef = useRef(0); // Successful parries
   const parryFlashRef = useRef(0);
-  const PARRY_WINDOW = 300; // 300ms parry window
+  const PARRY_WINDOW = 400; // active parry input window
   const PARRY_COOLDOWN = 800;
 
   // Explosion visuals
@@ -548,6 +549,7 @@ function EldenRingGate() {
           isParryingRef.current = true;
           parryWindowEndRef.current = now + PARRY_WINDOW;
           parryCooldownEndRef.current = now + PARRY_COOLDOWN;
+          parryAnimEndRef.current = now + 600; // full GIF duration
           setKnightAnimation('__AttackComboNoMovement.gif');
         }
       }
@@ -703,6 +705,7 @@ function EldenRingGate() {
           isParryingRef.current = true;
           parryWindowEndRef.current = now + PARRY_WINDOW;
           parryCooldownEndRef.current = now + PARRY_COOLDOWN;
+          parryAnimEndRef.current = now + 600; // full GIF duration
           setKnightAnimation('__AttackComboNoMovement.gif');
         }
       }
@@ -1689,7 +1692,7 @@ function EldenRingGate() {
       // ===== PLAYER ANIMATION =====
       if (isSlippingRef.current) {
         // Don't override — slip animation was set when slip started
-      } else if (!isAttackingRef.current && !isDashingRef.current) {
+      } else if (!isAttackingRef.current && !isDashingRef.current && now > parryAnimEndRef.current) {
         const isMovingHorizontal = keysPressedRef.current['a'] || keysPressedRef.current['d'];
         if (!isOnGroundRef.current) {
           if (knightVelocityRef.current.y < 0) {
@@ -3758,31 +3761,6 @@ function EldenRingGate() {
         ctx.restore();
       }
 
-      // ===== PARRY READY INDICATOR =====
-      if (isParryingRef.current) {
-        ctx.save();
-        const hb2 = getKnightHitbox(knightPosRef.current, facingDirRef.current);
-        const kx = (hb2.left + hb2.right) / 2;
-        const ky = (hb2.top + hb2.bottom) / 2;
-        // Shield arc in front of player at knight's center
-        const dir = facingDirRef.current === 'right' ? 0 : Math.PI;
-        ctx.globalAlpha = 0.5 + Math.sin(now * 0.03) * 0.2;
-        ctx.strokeStyle = '#ffcc00';
-        ctx.lineWidth = 4;
-        ctx.shadowColor = '#ffaa00';
-        ctx.shadowBlur = 12;
-        ctx.beginPath();
-        ctx.arc(kx, ky, 45, dir - Math.PI / 3, dir + Math.PI / 3);
-        ctx.stroke();
-        // Inner shield line
-        ctx.globalAlpha = 0.3;
-        ctx.fillStyle = '#ffdd44';
-        ctx.beginPath();
-        ctx.arc(kx, ky, 42, dir - Math.PI / 4, dir + Math.PI / 4);
-        ctx.lineTo(kx, ky);
-        ctx.fill();
-        ctx.restore();
-      }
 
       // ===== STYLE TEXT POPUPS =====
       styleTextRef.current.forEach(st => {
@@ -4066,20 +4044,6 @@ function EldenRingGate() {
         ctx.restore();
       }
 
-      // ===== INVULNERABILITY SHIMMER on knight =====
-      if (isInvulnerableRef.current) {
-        const hb = getKnightHitbox(knightPosRef.current, facingDirRef.current);
-        const kx = (hb.left + hb.right) / 2;
-        const ky = (hb.top + hb.bottom) / 2;
-        ctx.save();
-        ctx.globalAlpha = 0.2 + Math.sin(now * 0.02) * 0.15;
-        ctx.strokeStyle = '#44ffff';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(kx, ky, 50, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-      }
 
       ctx.restore(); // End screen shake
 
@@ -4131,6 +4095,7 @@ function EldenRingGate() {
 
       {/* Knight Character */}
       <img
+        key={knightAnimation}
         src={getKnightAnimation(knightAnimation)}
         alt="Knight"
         className={`knight-sprite ${facingDirection === 'left' ? 'flip-h' : ''} ${isDashingRef.current ? 'dashing' : ''}`}

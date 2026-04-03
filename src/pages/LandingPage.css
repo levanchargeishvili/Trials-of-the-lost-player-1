@@ -540,6 +540,46 @@ button, a, input[type="range"] {
   .death-note-text {
     font-size: 10px;
   }
+
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .yair-text {
+    font-size: 1.1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .lore-text {
+    font-size: 0.9rem;
+  }
+
+  .greeting {
+    font-size: 1.1rem;
+  }
+
+  .trial-start {
+    font-size: 1.1rem;
+  }
+
+  .rules {
+    font-size: 1rem;
+  }
 }
 
 /*

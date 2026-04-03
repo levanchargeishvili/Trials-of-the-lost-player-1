@@ -151,3 +151,29 @@
   from { background-position: 0 0; }
   to { background-position: -10000px 5000px; }
 }
+
+/* Responsive */
+@media (max-width: 480px) {
+  .preloader-content {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .preloader-title {
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+
+  .preloader-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .preloader-bar {
+    height: 22px;
+  }
+
+  .preloader-percentage {
+    font-size: 18px;
+  }
+}

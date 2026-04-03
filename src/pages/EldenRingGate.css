@@ -471,3 +471,36 @@
     padding: 12px 30px;
   }
 }
+
+@media (max-width: 480px) {
+  .game-title {
+    font-size: 1rem;
+    letter-spacing: 0;
+  }
+
+  .game-header {
+    padding: 8px;
+  }
+
+  .controls-hint {
+    font-size: 0.65rem;
+    padding: 6px 10px;
+    bottom: 5px;
+    right: 5px;
+  }
+
+  .game-over-title,
+  .victory-title {
+    font-size: 2rem;
+  }
+
+  .game-over-subtitle,
+  .victory-subtitle {
+    font-size: 1rem;
+  }
+
+  .restart-btn {
+    font-size: 1rem;
+    padding: 10px 24px;
+  }
+}

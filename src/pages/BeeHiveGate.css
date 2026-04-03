@@ -1208,4 +1208,81 @@
   .answer-input {
     width: 100%;
   }
+
+  .battle-bees {
+    flex-wrap: wrap;
+  }
+
+  .battle-bee {
+    height: 200px;
+  }
+
+  .battle-bee-image-wrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .meteor-message {
+    font-size: 2.5rem;
+  }
+
+  .tarnished-message {
+    font-size: 2rem;
+  }
+
+  .game-lost-popup {
+    padding: 40px 30px;
+  }
+
+  .game-lost-title {
+    font-size: 3rem;
+  }
+
+  .math-popup {
+    padding: 30px;
+  }
+
+  .math-question {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hive-title {
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+  }
+
+  .hive-slot {
+    width: 130px;
+    height: 190px;
+  }
+
+  .battle-bee {
+    width: 100px;
+    height: 170px;
+    padding: 10px;
+  }
+
+  .battle-bee-name {
+    font-size: 0.85rem;
+  }
+
+  .egg-label {
+    font-size: 1.2rem;
+  }
+
+  .egg {
+    width: 45px;
+    height: 45px;
+  }
+
+  .bet-on-message {
+    font-size: 2rem;
+  }
+
+  .return-gate-btn {
+    font-size: 1.3rem;
+    padding: 15px 40px;
+  }
 }

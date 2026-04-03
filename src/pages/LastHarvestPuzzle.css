@@ -1118,3 +1118,60 @@
 .catan-hex.incorrect-check .hex-inner {
   filter: drop-shadow(0 0 20px rgba(139, 0, 0, 0.8));
 }
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .catan-puzzle-container {
+    padding: 10px;
+  }
+
+  .puzzle-title {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .puzzle-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .logs-panel,
+  .board-section,
+  .palette-panel {
+    height: auto;
+    max-height: 80vh;
+  }
+
+  .catan-board-hexagon {
+    transform: scale(0.5);
+    transform-origin: top center;
+    margin: 0 auto;
+    height: 380px;
+  }
+
+  .hint-system {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .panel-title {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .puzzle-title {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  .catan-board-hexagon {
+    transform: scale(0.38);
+    height: 290px;
+  }
+
+  .hint-btn {
+    font-size: 0.85rem;
+    padding: 8px 14px;
+  }
+}
